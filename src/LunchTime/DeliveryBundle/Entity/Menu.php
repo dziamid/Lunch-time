@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LunchTime\DeliveryBundle\Entity\Menu
  *
- * @ORM\Table()
+ * @ORM\Table(name="Menu")
  * @ORM\Entity
  */
 class Menu
@@ -28,7 +28,10 @@ class Menu
      */
     private $due_date;
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="\LunchTime\DeliveryBundle\Entity\Menu\Item", mappedBy="menu")
+     */
+    private $items;
     /**
      * Get id
      *
@@ -57,5 +60,29 @@ class Menu
     public function getDueDate()
     {
         return $this->due_date;
+    }
+    public function __construct()
+    {
+        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add items
+     *
+     * @param LunchTime\DeliveryBundle\Entity\Menu\Item $items
+     */
+    public function addItem(\LunchTime\DeliveryBundle\Entity\Menu\Item $items)
+    {
+        $this->items[] = $items;
+    }
+
+    /**
+     * Get items
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getItems()
+    {
+        return $this->items;
     }
 }

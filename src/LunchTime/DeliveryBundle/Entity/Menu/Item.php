@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LunchTime\DeliveryBundle\Entity\Menu\Item
  *
- * @ORM\Table()
+ * @ORM\Table(name="MenuItem")
  * @ORM\Entity
  */
 class Item
@@ -28,6 +28,10 @@ class Item
      */
     private $title;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="\LunchTime\DeliveryBundle\Entity\Menu", inversedBy="items")
+     */
+    private $menu;
 
     /**
      * Get id
@@ -57,5 +61,25 @@ class Item
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set menu
+     *
+     * @param LunchTime\DeliveryBundle\Entity\Menu $menu
+     */
+    public function setMenu(\LunchTime\DeliveryBundle\Entity\Menu $menu)
+    {
+        $this->menu = $menu;
+    }
+
+    /**
+     * Get menu
+     *
+     * @return LunchTime\DeliveryBundle\Entity\Menu 
+     */
+    public function getMenu()
+    {
+        return $this->menu;
     }
 }
