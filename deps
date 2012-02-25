@@ -63,8 +63,8 @@
     version=v1.0.1
 
 [doctrine-fixtures]
-    git=http://github.com/doctrine/data-fixtures.git
+    git=https://github.com/doctrine/data-fixtures.git
 
 [DoctrineFixturesBundle]
-    git=http://github.com/symfony/DoctrineFixturesBundle.git
+    git=https://github.com/symfony/DoctrineFixturesBundle.git
     target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
