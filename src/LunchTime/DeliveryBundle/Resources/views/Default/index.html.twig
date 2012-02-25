@@ -1,7 +1,11 @@
-{% raw %}
-<script type="text/x-handlebars">
-    {{#view App.MyView}}
-    <h1>Hello world!</h1>
-    {{/view}}
-</script>
-{% endraw %}
+{% extends 'LTDeliveryBundle::layout.html.twig' %}
+
+{% block body %}
+    {% raw %}
+    <script type="text/x-handlebars">
+        {{#view App.MyView}}
+        <h1>Hello world!</h1>
+        {{/view}}
+    </script>
+    {% endraw %}
+{% endblock %}

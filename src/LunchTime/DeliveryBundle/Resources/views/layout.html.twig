@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('bundles/ltdelivery/css/style.css') }}" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+    <script src="{{ asset('bundles/ltdelivery/js/libs/ember-0.9.5.min.js') }}"></script>
+    <script src="{{ asset('bundles/ltdelivery/js/app.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    {% include 'LTDeliveryBundle:Default:index.html.twig' %}
+{% endblock %}
