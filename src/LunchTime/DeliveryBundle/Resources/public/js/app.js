@@ -55,8 +55,10 @@ App.store = DS.Store.create({
 
 //Menu model
 App.Menu = DS.Model.extend({
-    due_date: DS.attr('date')
+    due_date: DS.attr('date'),
+    items: DS.hasMany('App.MenuItem', { embedded: true })
 });
+
 App.Menu.reopenClass({
     url: '/menu'
 });

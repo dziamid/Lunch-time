@@ -8,11 +8,17 @@
     <h1>Menu</h1>
     {{#each menus}}
         <li>{{due_date}}</li>
+
+        <li>
+            Items:
+            <ul>
+                {{#each items}}
+                    <li>{{title}}</li>
+                {{/each}}
+            </ul>
+        </li>
     {{/each}}
-    <h1>Menu items</h1>
-    {{#each items}}
-        <li>{{title}}</li>
-    {{/each}}
+
 {{/view}}
 
 </script>

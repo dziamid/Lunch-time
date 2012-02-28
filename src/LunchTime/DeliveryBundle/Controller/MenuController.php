@@ -17,7 +17,7 @@ class MenuController extends Controller
         /** @var $em \Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getEntityManager();
 
-        $menus = $em->getRepository('LTDeliveryBundle:Menu')->getListQuery()
+        $menus = $em->getRepository('LTDeliveryBundle:Menu')->getListWithItemsQuery()
             ->getArrayResult();
         foreach ($menus as &$menu) {
             //format date into javascript Date parsable format
