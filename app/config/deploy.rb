@@ -5,6 +5,9 @@ set :app_path,    "app"
 set :web_path,    "web"
 
 set :repository,  "https://github.com/dziamid/Lunch-time"
+#set :repository,  "git@github.com:dziamid/Lunch-time.git"
+
+
 set :scm,         :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `subversion`, `mercurial`, `perforce`, `subversion` or `none`
 
@@ -22,7 +25,7 @@ default_run_options[:pty] = true
 
 #symfony2
 set :shared_files,      ["app/config/parameters.ini"]
-set :shared_children,     [app_path + "/cache", app_path + "/logs", web_path + "/uploads", "vendor"]
+set :shared_children,     [app_path + "/logs", web_path + "/uploads", "vendor"]
 set :update_vendors, true
 set :vendors_mode, "install"
 set :user, "dziamid"
