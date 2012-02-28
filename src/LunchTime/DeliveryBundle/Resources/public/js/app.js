@@ -51,6 +51,17 @@ App.store = DS.Store.create({
     adapter: App.SymfonyAdapter.create()
 });
 
+//MODEL
+
+//Menu model
+App.Menu = DS.Model.extend({
+    due_date: DS.attr('date')
+});
+App.Menu.reopenClass({
+    url: '/menu'
+});
+
+//MenuItem model
 App.MenuItem = DS.Model.extend({
     title: DS.attr('string')
 });
@@ -59,10 +70,16 @@ App.MenuItem.reopenClass({
     url: '/menu/item'
 });
 
+
 App.MenuItemsController = Ember.ArrayProxy.create({
     content: App.store.findAll(App.MenuItem)
 });
 
+App.MenuController = Ember.ArrayProxy.create({
+    content: App.store.findAll(App.Menu)
+});
+
 App.MenuView = Em.View.extend({
+    menusBinding: 'App.MenuController',
     itemsBinding: 'App.MenuItemsController'
 });
