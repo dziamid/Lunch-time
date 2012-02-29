@@ -87,7 +87,9 @@ a:hover { color: #036; }
 */
 
 
-
+ul, li {
+    list-style-type: none;
+}
 
 
 

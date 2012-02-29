@@ -1,0 +1,11 @@
+{% raw %}
+{{#view App.MenuView id="active-menu"}}
+    {{#each menus}}
+    <h1>Menu for {{dueDateString}}</h1>
+        {{#each items}}
+            {{title}}
+        {{/each}}
+    {{/each}}
+
+{{/view}}
+{% endraw %}

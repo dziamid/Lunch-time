@@ -1,26 +1,7 @@
 {% extends 'LTDeliveryBundle::layout.html.twig' %}
 
 {% block body %}
-{% raw %}
 <script type="text/x-handlebars">
-
-{{#view App.MenuView}}
-    <h1>Menu</h1>
-    {{#each menus}}
-        <li>{{dueDateString}}</li>
-
-        <li>
-            Items:
-            <ul>
-                {{#each items}}
-                    <li>{{title}}</li>
-                {{/each}}
-            </ul>
-        </li>
-    {{/each}}
-
-{{/view}}
-
+    {% include 'LTDeliveryBundle:Default:index.html.handlebars' %}
 </script>
-{% endraw %}
 {% endblock %}
