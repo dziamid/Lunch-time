@@ -1,4 +1,30 @@
 window.App = Ember.Application.create();
+DS.attr.transforms.date = {
+    //overriden to use date.js
+    from: function (serialized) {
+        var type = typeof serialized;
+
+        if (type === "string" || type === "number") {
+            return Date.parse(serialized);
+        } else if (serialized === null || serialized === undefined) {
+            return serialized;
+        } else {
+            return null;
+        }
+    },
+    to: function(date, format) {
+        if (format === undefined) {
+            format = 'yyyy-MM-dd hh:mm:ss';
+        }
+        if (date instanceof Date) {
+            return Date.toString(format);
+        } else if (date === undefined) {
+            return undefined;
+        } else {
+            return null;
+        }
+    }
+};
 
 App.SymfonyAdapter = DS.RESTAdapter.extend({
 
@@ -55,7 +81,10 @@ App.store = DS.Store.create({
 
 //Menu model
 App.Menu = DS.Model.extend({
-    due_date: DS.attr('date'),
+    dueDate: DS.attr('date', {key: 'due_date'}),
+    dueDateString: function() {
+        return this.get('dueDate').toString('yyyy-MM-dd hh:mm:ss');
+    }.property('dueDate'),
     items: DS.hasMany('App.MenuItem', { embedded: true })
 });
 

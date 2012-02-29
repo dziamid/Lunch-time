@@ -23,7 +23,8 @@ class MenuController extends Controller
             //format date into javascript Date parsable format
             //'October 13, 1975 11:13:00' for mysql's datetime
             //'October 13, 1975' for mysql's date
-            $menu['due_date'] = (string)$menu['due_date']->format('F j, Y');
+            //$menu['due_date'] = (string)$menu['due_date']->format('F j, Y');
+            $menu['due_date'] = $menu['due_date']->format('Y-m-d H:i:s');
         }
 
 
