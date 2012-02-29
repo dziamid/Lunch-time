@@ -34,6 +34,7 @@ App.SymfonyAdapter = DS.RESTAdapter.extend({
         this.ajax(url, "GET", {
             success: function (json) {
                 store.loadMany(type, json);
+
             }
         });
     },
@@ -85,7 +86,9 @@ App.Menu = DS.Model.extend({
     dueDateString: function() {
         return this.get('dueDate').toString('yyyy-MM-dd hh:mm:ss');
     }.property('dueDate'),
-    items: DS.hasMany('App.MenuItem', { embedded: true })
+    items: DS.hasMany('App.MenuItem', {
+        embedded: true
+    })
 });
 
 App.Menu.reopenClass({
@@ -101,16 +104,44 @@ App.MenuItem.reopenClass({
     url: '/menu/item'
 });
 
+//model objects
 
-App.MenuItemsController = Ember.ArrayProxy.create({
-    content: App.store.findAll(App.MenuItem)
-});
+App.Menus = App.store.findAll(App.Menu);
 
 App.MenuController = Ember.ArrayProxy.create({
-    content: App.store.findAll(App.Menu)
+    contentBinding: 'App.Menus',
+
+    dateExists: function (date) {
+        return this.some(function (menu) {
+            return !menu.get('dueDate').compareTo(date);
+        });
+    }
 });
 
 App.MenuView = Em.View.extend({
-    menusBinding: 'App.MenuController',
-    itemsBinding: 'App.MenuItemsController'
+    menusBinding: 'App.MenuController'
+});
+
+App.CalendarView = Ember.View.extend({
+    activeDate: null,
+
+    isDateEnabled: function (date) {
+        //check if date in array
+        return App.MenuController.dateExists(date);
+    },
+    didInsertElement: function () {
+        var that = this;
+        this.$('.picker').datepicker({
+            beforeShowDay: function (date) {
+                return [that.isDateEnabled(date), ''];
+            },
+            onSelect: function(dateText) {
+                that.set('activeDate', Date(dateText));
+            }
+        });
+    },
+
+    dateChanged: function () {
+        console.log('change date');
+    }.observes('activeDate')
 });
