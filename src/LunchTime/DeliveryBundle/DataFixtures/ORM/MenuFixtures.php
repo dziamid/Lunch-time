@@ -12,17 +12,18 @@ class MenuFixtures extends AbstractFixture implements FixtureInterface, OrderedF
     public function load(ObjectManager $manager)
     {
         $menu = new Menu();
-        $menu->setDueDate(new \DateTime());
+        $menu->setDueDate(new \DateTime('2012-02-15'));
         $manager->persist($menu);
 
-        $this->addReference('menu-today', $menu);
+        $this->addReference('menu-1', $menu);
 
         $menu = new Menu();
-        $menu->setDueDate(new \DateTime());
+        $menu->setDueDate(new \DateTime('2012-02-14'));
         $manager->persist($menu);
+        $this->addReference('menu-2', $menu);
 
         $menu = new Menu();
-        $menu->setDueDate(new \DateTime());
+        $menu->setDueDate(new \DateTime('2012-01-01'));
         $manager->persist($menu);
 
         $manager->flush();

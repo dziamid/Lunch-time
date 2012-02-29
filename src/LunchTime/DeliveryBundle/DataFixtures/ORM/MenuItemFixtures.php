@@ -11,17 +11,24 @@ class MenuItemFixtures extends AbstractFixture implements FixtureInterface, Orde
 {
     public function load(ObjectManager $manager)
     {
-        $menuToday = $this->getReference('menu-today');
+        $menu1 = $this->getReference('menu-1');
+        $menu2 = $this->getReference('menu-2');
 
-        $item = new Item();
-        $item->setTitle('Борщ');
-        $item->setMenu($menuToday);
-        $manager->persist($item);
+        $titles = array('Борщ', 'Щи', 'Рот полощи', 'Салат', 'Ещё салат', 'Куй звезда');
+        foreach($titles as $title) {
+            $item = new Item();
+            $item->setTitle($title);
+            $item->setMenu($menu1);
+            $manager->persist($item);
+        }
 
-        $item = new Item();
-        $item->setTitle('Макароны по флотски');
-        $item->setMenu($menuToday);
-        $manager->persist($item);
+        foreach($titles as $title) {
+            $item = new Item();
+            $item->setTitle($title);
+            $item->setMenu($menu2);
+            $manager->persist($item);
+        }
+
 
         $manager->flush();
     }

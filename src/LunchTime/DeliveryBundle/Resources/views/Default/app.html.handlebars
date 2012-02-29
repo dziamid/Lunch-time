@@ -1,14 +1,13 @@
 {% raw %}
 {{#view App.MenuView id="active-menu"}}
-    {{#each menus}}
-    <h1>Menu for {{dueDateString}}</h1>
-        {{#each items}}
-            {{title}}
-        {{/each}}
+    <h1>{{activeMenu.dueDateString}}</h1>
+    <ul>
+    {{#each activeMenu.items}}
+    <li>
+        {{title}}
+    </li>
     {{/each}}
-
-<p>active</p>
-{{activeMenu.dueDateString}}
+    </ul>
 
 {{/view}}
 {% endraw %}

@@ -84,7 +84,7 @@ App.store = DS.Store.create({
 App.Menu = DS.Model.extend({
     dueDate: DS.attr('date', {key: 'due_date'}),
     dueDateString: function() {
-        return this.get('dueDate').toString('yyyy-MM-dd hh:mm:ss');
+        return this.get('dueDate').toString('d MMMM');
     }.property('dueDate'),
     items: DS.hasMany('App.MenuItem', {
         embedded: true
@@ -128,7 +128,7 @@ App.MenuController = Ember.ArrayProxy.create({
 });
 
 App.MenuView = Em.View.extend({
-    menusBinding: 'App.MenuController',
+    //menusBinding: 'App.MenuController',
     activeMenuBinding: 'App.MenuController.active'
 });
 
