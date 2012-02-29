@@ -109,8 +109,17 @@ App.MenuItem.reopenClass({
 App.Menus = App.store.findAll(App.Menu);
 
 App.MenuController = Ember.ArrayProxy.create({
-    contentBinding: 'App.Menus',
+    activeDate: null,
 
+    contentBinding: 'App.Menus',
+    active: function () {
+        var that = this;
+        return this.content.find(function (menu) {
+            var date = menu.get('dueDate');
+            var activeDate = that.get('activeDate');
+            return !activeDate.compareTo(date);
+        });
+    }.property('activeDate'),
     dateExists: function (date) {
         return this.some(function (menu) {
             return !menu.get('dueDate').compareTo(date);
@@ -119,15 +128,16 @@ App.MenuController = Ember.ArrayProxy.create({
 });
 
 App.MenuView = Em.View.extend({
-    menusBinding: 'App.MenuController'
+    menusBinding: 'App.MenuController',
+    activeMenuBinding: 'App.MenuController.active'
 });
 
 App.CalendarView = Ember.View.extend({
-    activeDate: null,
 
     isDateEnabled: function (date) {
         //check if date in array
-        return App.MenuController.dateExists(date);
+        //return App.MenuController.dateExists(date);
+        return true;
     },
     didInsertElement: function () {
         var that = this;
@@ -136,12 +146,14 @@ App.CalendarView = Ember.View.extend({
                 return [that.isDateEnabled(date), ''];
             },
             onSelect: function(dateText) {
-                that.set('activeDate', Date(dateText));
+                that.dateChanged((new Date(dateText)).clearTime());
             }
         });
     },
 
-    dateChanged: function () {
-        console.log('change date');
-    }.observes('activeDate')
+    dateChanged: function (date) {
+        App.MenuController.set('activeDate', date);
+        console.log('Date changed to' + date.toString());
+
+    }
 });
