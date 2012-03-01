@@ -1,18 +1,29 @@
 {% extends '::base.html.twig' %}
 
 {% block stylesheets %}
-  {{ parent() }}
-<link rel="stylesheet" href="{{ asset('bundles/ltdelivery/css/style.css') }}" type="text/css" />
-<link rel="stylesheet" href="{{ asset('bundles/ltdelivery/css/app.css') }}" type="text/css" />
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('bundles/ltdelivery/css/style.css') }}" type="text/css"/>
+<link rel="stylesheet" href="{{ asset('bundles/ltdelivery/css/app.css') }}" type="text/css"/>
 {% endblock %}
 
 {% block javascripts %}
-  {{ parent() }}
-    <script src="{{ asset('bundles/ltdelivery/js/libs/ember-0.9.5.js') }}"></script>
-    <script src="{{ asset('bundles/ltdelivery/js/libs/ember-data-latest.js') }}"></script>
-    <script src="{{ asset('bundles/ltdelivery/js/app.js') }}"></script>
+{{ parent() }}
+{# TODO: move this to assetic to be able to include dirs #}
+
+<script src="{{ asset('bundles/ltdelivery/js/vendor/ember-0.9.5.js') }}"></script>
+<script src="{{ asset('bundles/ltdelivery/js/vendor/ember-data-latest.js') }}"></script>
+<script src="{{ asset('bundles/ltdelivery/js/lib/adapter.js') }}"></script>
+<script src="{{ asset('bundles/ltdelivery/js/lib/store.js') }}"></script>
+<script type="text/javascript">
+    window.App = Ember.Application.create();
+</script>
+
+<script src="{{ asset('bundles/ltdelivery/js/entity/menu.js') }}"></script>
+<script src="{{ asset('bundles/ltdelivery/js/entity/menu-item.js') }}"></script>
+<script src="{{ asset('bundles/ltdelivery/js/app.js') }}"></script>
+
 {% endblock %}
 
 {% block body %}
-    {% include 'LTDeliveryBundle:Default:index.html.twig' %}
+{% include 'LTDeliveryBundle:Default:index.html.twig' %}
 {% endblock %}
