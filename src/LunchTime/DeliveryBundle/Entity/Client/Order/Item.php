@@ -33,6 +33,10 @@ class Item
      */
     private $order;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="\LunchTime\DeliveryBundle\Entity\Menu\Item")
+     */
+    private $menu_item;
 
     /**
      * Get id
@@ -82,5 +86,25 @@ class Item
     public function getOrder()
     {
         return $this->order;
+    }
+
+    /**
+     * Set menu_item
+     *
+     * @param LunchTime\DeliveryBundle\Entity\Menu\Item $menuItem
+     */
+    public function setMenuItem(\LunchTime\DeliveryBundle\Entity\Menu\Item $menuItem)
+    {
+        $this->menu_item = $menuItem;
+    }
+
+    /**
+     * Get menu_item
+     *
+     * @return LunchTime\DeliveryBundle\Entity\Menu\Item 
+     */
+    public function getMenuItem()
+    {
+        return $this->menu_item;
     }
 }
