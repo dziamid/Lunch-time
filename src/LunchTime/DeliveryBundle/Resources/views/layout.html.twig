@@ -6,31 +6,6 @@
 <link rel="stylesheet" href="{{ asset('bundles/ltdelivery/css/app.css') }}" type="text/css"/>
 {% endblock %}
 
-{% block javascripts %}
-{{ parent() }}
-{# TODO: move this to assetic to be able to include dirs #}
-
-<script src="{{ asset('bundles/ltdelivery/js/vendor/ember-0.9.5.js') }}"></script>
-<script src="{{ asset('bundles/ltdelivery/js/vendor/ember-data-latest.js') }}"></script>
-<script src="{{ asset('bundles/ltdelivery/js/lib/adapter.js') }}"></script>
-<script src="{{ asset('bundles/ltdelivery/js/lib/store.js') }}"></script>
-
-<script src="{{ asset('bundles/ltdelivery/js/app.js') }}"></script>
-
-<script src="{{ asset('bundles/ltdelivery/js/entity/menu.js') }}"></script>
-<script src="{{ asset('bundles/ltdelivery/js/entity/menu-item.js') }}"></script>
-<script src="{{ asset('bundles/ltdelivery/js/entity/order.js') }}"></script>
-<script src="{{ asset('bundles/ltdelivery/js/entity/order-item.js') }}"></script>
-
-<script src="{{ asset('bundles/ltdelivery/js/controller/menu-controller.js') }}"></script>
-<script src="{{ asset('bundles/ltdelivery/js/controller/order-controller.js') }}"></script>
-
-<script src="{{ asset('bundles/ltdelivery/js/view/menu-view.js') }}"></script>
-<script src="{{ asset('bundles/ltdelivery/js/view/calendar-view.js') }}"></script>
-<script src="{{ asset('bundles/ltdelivery/js/view/order-view.js') }}"></script>
-
-{% endblock %}
-
 {% block body %}
 {% include 'LTDeliveryBundle:Default:index.html.twig' %}
 {% endblock %}
