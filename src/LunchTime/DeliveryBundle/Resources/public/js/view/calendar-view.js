@@ -2,7 +2,7 @@ App.CalendarView = Ember.View.extend({
 
     isDateEnabled: function (date) {
         //check if date in array
-        return App.MenuController.dateExists(date);
+        return App.get('MenuController').dateExists(date);
         //return true;
     },
     didInsertElement: function () {

@@ -1,3 +1,3 @@
-App.OrderController = Ember.ArrayProxy.create({
-    content: App.store.findAll(App.Order)
-});
+App.set('OrderController', Ember.ArrayProxy.create({
+    content: []
+}));
