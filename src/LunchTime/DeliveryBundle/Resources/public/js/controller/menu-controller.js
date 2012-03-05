@@ -15,9 +15,5 @@ App.set('MenuController', Ember.ArrayProxy.create({
         return this.some(function (menu) {
             return !menu.get('dueDate').compareTo(date);
         });
-    },
-    contentDidChange: function () {
-        console.log('menu array has changed');
-        //App.CalendarView.refresh();
     }
 }));

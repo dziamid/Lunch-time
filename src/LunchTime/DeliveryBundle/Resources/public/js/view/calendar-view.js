@@ -22,14 +22,14 @@ App.CalendarView = Ember.View.extend({
     },
 
     dateChanged: function (date) {
-        App.MenuController.set('activeDate', date);
-        //console.log('Date changed to' + date.toString());
+        App.get('MenuController').set('activeDate', date);
+        console.log('Date changed to' + date.toString());
 
     },
     //TODO: this fires for every model item being loaded
     //need to do it only once, at the end of the run loop
     refresh: function () {
         this.$('.picker').datepicker('refresh');
-        //console.log('datepicker refreshed');
-    }.observes('App.MenuController.content.@each')
+        console.log('datepicker refreshed');
+    }.observes('App.MenuList.isLoaded')
 });

@@ -1,8 +1,13 @@
 window.App = Ember.Application.create({
     ready: function () {
 
-        var menus = App.store.findAll(App.Menu);
-        App.get('MenuController').set('content', menus);
+        App.store = DS.Store.create({
+            adapter: DS.SymfonyAdapter.create()
+        });
+
+        App.set('MenuList', App.store.findQuery(App.Menu, 'homepageList'));
+
+        App.get('MenuController').set('content', App.get('MenuList'));
 
         var orders = App.store.findAll(App.Order);
         App.get('OrderController').set('content', orders);
@@ -10,6 +15,4 @@ window.App = Ember.Application.create({
     }
 });
 
-App.store = DS.Store.create({
-    adapter: DS.SymfonyAdapter.create()
-});
+

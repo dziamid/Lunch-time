@@ -11,6 +11,17 @@ DS.SymfonyAdapter = DS.RESTAdapter.extend({
         });
     },
 
+    findQuery: function (store, type, query, modelArray) {
+        var url = this.rootForType(type);
+
+        this.ajax(url, "GET", {
+            data: query,
+            success: function (json) {
+                modelArray.load(json);
+            }
+        });
+    },
+
     rootForType: function (type) {
         var base = this.getBaseUrl();
         var url;
