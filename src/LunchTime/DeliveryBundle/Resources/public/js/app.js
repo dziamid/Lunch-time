@@ -5,13 +5,8 @@ window.App = Ember.Application.create({
             adapter: DS.SymfonyAdapter.create()
         });
 
-        App.set('MenuList', App.store.findQuery(App.Menu, 'homepageList'));
-
-        App.get('MenuController').set('content', App.get('MenuList'));
-
-        var orders = App.store.findAll(App.Order);
-        App.get('OrderController').set('content', orders);
-
+        App.setPath('MenuController.content', App.store.findQuery(App.Menu, 'homepageList'));
+        App.setPath('OrderController.content',App.store.findAll(App.Order));
     }
 });
 

@@ -1,6 +1,6 @@
 App.set('MenuController', Ember.ArrayProxy.create({
     activeDate: null,
-
+    availiableDates: [],
     content: [],
 
     active: function () {
@@ -12,8 +12,15 @@ App.set('MenuController', Ember.ArrayProxy.create({
         });
     }.property('activeDate'),
     dateExists: function (date) {
-        return this.some(function (menu) {
-            return !menu.get('dueDate').compareTo(date);
-        });
+        //cache date list for performance
+        var self = this;
+        if (this.availiableDates.length == 0) {
+            this.content.forEach(function(item) {
+                self.availiableDates.push(item.get('dueDate').valueOf());
+            });
+        }
+        var dateString = date.valueOf();
+        var result = $.inArray(dateString, this.availiableDates) !== -1;
+        return result;
     }
 }));
