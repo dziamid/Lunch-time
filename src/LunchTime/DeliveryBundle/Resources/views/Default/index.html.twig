@@ -2,10 +2,18 @@
 
 {% block body %}
 <script type="text/x-handlebars">
-    {% include 'LTDeliveryBundle:Default:active-menu.html.handlebars' %}
+
+    <div class="section clear-float">
+        <div class="col">
+            {% include 'LTDeliveryBundle:Default:active-menu.html.handlebars' %}
+        </div>
+        <div class="col">
+            {% include 'LTDeliveryBundle:Default:order.html.handlebars' %}
+        </div>
+    </div>
+
 
     {% include 'LTDeliveryBundle:Default:calendar.html.handlebars' %}
 
-    {% include 'LTDeliveryBundle:Default:order.html.handlebars' %}
 </script>
 {% endblock %}

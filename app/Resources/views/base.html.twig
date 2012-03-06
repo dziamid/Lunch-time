@@ -19,6 +19,14 @@
     {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/hot-sneaks/jquery-ui-1.8.18.custom.css') }}" type="text/css"/>
     {% endblock %}
+    <!--[if IE]>
+    <style>
+        .clear-float {
+        zoom: 1;
+        display: block;
+    }
+    </style>
+    <![endif]-->
 
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}"/>
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">

@@ -1,13 +1,13 @@
 {% raw %}
 {{#view App.OrderView id="active-order"}}
-    <h1>All orders</h1>
+    {{#with order }}
     <ul>
-    {{#each orders}}
-    <li>
-        {{id}}
-    </li>
-    {{/each}}
+        {{#each items}}
+        <li>
+            {{id}}
+        </li>
+        {{/each}}
     </ul>
-
+    {{/with}}
 {{/view}}
 {% endraw %}

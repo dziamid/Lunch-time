@@ -1,5 +1,21 @@
-#active-menu {
-    margin: 10px;
+.ember-view {
     padding: 10px;
     border: 1px solid #ccc;
+    min-height: 100px;
+}
+
+.col {
+    width: 50%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin: 0;
+    float: left;
+}
+
+.clear-float:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
 }

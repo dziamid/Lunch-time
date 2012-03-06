@@ -4,3 +4,7 @@ App.OrderItem = DS.Model.extend({
     order: DS.hasOne('App.Order'),
     menuItem: DS.hasOne('App.MenuItem')
 });
+
+App.OrderItem.reopenClass({
+    url: '/order/item'
+});
