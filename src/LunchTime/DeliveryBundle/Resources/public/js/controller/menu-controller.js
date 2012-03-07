@@ -1,5 +1,5 @@
 App.set('MenuController', Ember.ArrayProxy.create({
-    activeDate: null,
+    activeDate: (new Date()).clearTime(),
     availiableDates: [],
     content: [],
 
@@ -10,7 +10,7 @@ App.set('MenuController', Ember.ArrayProxy.create({
             var activeDate = that.get('activeDate');
             return !(activeDate && activeDate.compareTo(date));
         });
-    }.property('activeDate'),
+    }.property('activeDate', 'content.@each'),
     dateExists: function (date) {
         //cache date list for performance
         var self = this;
