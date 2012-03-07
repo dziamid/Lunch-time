@@ -2,13 +2,11 @@
 {{#view App.ActiveMenuView id="active-menu"}}
     <h1>{{menu.dueDateString}}</h1>
     {{#with menu }}
-    <ul>
         {{#each items}}
-        <li>
-            {{title}}
-        </li>
+            {{#view App.MenuItemView itemBinding="this"}}
+                {{item.title}}
+            {{/view}}
         {{/each}}
-    </ul>
     {{/with}}
 {{/view}}
 {% endraw %}
