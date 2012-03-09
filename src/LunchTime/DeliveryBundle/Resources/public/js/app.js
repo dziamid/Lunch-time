@@ -8,6 +8,9 @@ window.App = Ember.Application.create({
         App.setPath('MenuController.content', App.store.findQuery(App.Menu, 'homepageList'));
         //App.setPath('OrderController.content',App.store.findAll(App.Order));
         App.setPath('OrderController.active', App.store.createRecord(App.Order));
+
+        //App.setPath('CalendarController.activeDate', Date.parse('2012-03-07'));
+        App.setPath('CalendarController.activeDate', Date.parse('2012-03-04'));
     }
 });
 

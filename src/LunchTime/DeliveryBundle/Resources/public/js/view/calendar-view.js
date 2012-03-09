@@ -1,33 +1,29 @@
 App.CalendarView = Ember.View.extend({
+    controllerBinding: 'App.CalendarController',
 
-    isDateEnabled: function (date) {
-        //check if date in array
-        return App.get('MenuController').dateExists(date);
-        //return true;
-    },
     didInsertElement: function () {
         var that = this;
         this.$('.picker').datepicker({
             beforeShowDay: function (date) {
-                return [that.isDateEnabled(date), ''];
+                return [that.get('controller').isDateEnabled(date), ''];
             },
-            onSelect: function(dateText) {
-                that.dateChanged((new Date(dateText)).clearTime());
-            }
-        }).bind('dateSelected', function () {
-            console.log('date selected');
+            onSelect: function(dateString) {
+                that.get('controller').changeDate(Date.parse(dateString));
+            },
+            defaultDate: this.get('controller').get('activeDate')
         });
-
-    },
-
-    dateChanged: function (date) {
-        App.get('MenuController').set('activeDate', date);
-        console.log('Date changed to' + date.toString());
 
     },
 
     refresh: function () {
         this.$('.picker').datepicker('refresh');
         console.log('datepicker refreshed');
-    }.observes('App.MenuController.content.isLoaded')
+    }.observes('App.MenuController.content.isLoaded'),
+
+    onChangeDate: function () {
+        var date = this.get('controller').get('activeDate');
+        this.$('.picker').datepicker('setDate', date);
+        console.log('View: Date changed to' + date.toString());
+
+    }.observes('controller.activeDate')
 });

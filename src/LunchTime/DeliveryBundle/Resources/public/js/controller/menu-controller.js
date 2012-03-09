@@ -1,26 +1,26 @@
 App.set('MenuController', Ember.ArrayProxy.create({
-    activeDate: (new Date()).clearTime(),
-    availiableDates: [],
     content: [],
 
+    _cachedDates: [],
+
     active: function () {
-        var that = this;
+        var activeDate = App.getPath('CalendarController.activeDate');
         return this.content.find(function (menu) {
-            var date = menu.get('dueDate');
-            var activeDate = that.get('activeDate');
-            return !(activeDate && activeDate.compareTo(date));
+            return menu.get('dueDate').equals(activeDate);
         });
-    }.property('activeDate', 'content.@each'),
+    }.property('App.CalendarController.activeDate', 'content.@each'),
+
     dateExists: function (date) {
         //cache date list for performance
+        //TODO: there should be an option to refresh cache when content.@each changes
         var self = this;
-        if (this.availiableDates.length == 0) {
+        if (this._cachedDates.length == 0) {
             this.content.forEach(function(item) {
-                self.availiableDates.push(item.get('dueDate').valueOf());
+                self._cachedDates.push(item.get('dueDate').valueOf());
             });
         }
         var dateString = date.valueOf();
-        var result = $.inArray(dateString, this.availiableDates) !== -1;
+        var result = $.inArray(dateString, this._cachedDates) !== -1;
         return result;
     }
 }));
