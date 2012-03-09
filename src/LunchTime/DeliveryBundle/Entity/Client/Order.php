@@ -31,6 +31,13 @@ class Order
      */
     private $menu;
 
+    /**
+     * @var date $due_date
+     *
+     * @ORM\Column(name="due_date", type="date")
+     */
+    private $due_date;
+
 
     /**
      * Get id
@@ -86,5 +93,25 @@ class Order
     public function getMenu()
     {
         return $this->menu;
+    }
+
+    /**
+     * Set due_date
+     *
+     * @param date $dueDate
+     */
+    public function setDueDate($dueDate)
+    {
+        $this->due_date = $dueDate;
+    }
+
+    /**
+     * Get due_date
+     *
+     * @return date 
+     */
+    public function getDueDate()
+    {
+        return $this->due_date;
     }
 }
