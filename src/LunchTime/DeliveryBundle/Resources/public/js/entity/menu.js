@@ -5,9 +5,7 @@ App.Menu = DS.Model.extend({
     dueDateString: function() {
         return this.get('dueDate').toString('d MMMM');
     }.property('dueDate'),
-    items: DS.hasMany('App.MenuItem', {
-        embedded: true
-    })
+    items: DS.hasMany('App.MenuItem')
 });
 
 App.Menu.reopenClass({

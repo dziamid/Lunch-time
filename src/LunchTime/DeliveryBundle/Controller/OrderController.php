@@ -18,9 +18,57 @@ class OrderController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $orders = $em->getRepository('LTDeliveryBundle:Client\Order')->getListWithItemsQuery()
-            ->getArrayResult();
+            ->getResult();
 
-        return new Response(json_encode($orders));
+        $_orders = array();
+        foreach ($orders as $order) {
+            $_orders[] = $this->serializeOrder($order);
+        }
+
+        return new Response(json_encode($_orders));
+    }
+
+    /**
+     * @Route("/order/item")
+     */
+    public function itemsAction()
+    {
+        /** @var $em \Doctrine\ORM\EntityManager */
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $items = $em->getRepository('LTDeliveryBundle:Client\Order\Item')->getListQuery()
+            ->getResult();
+
+        $_items = array();
+        foreach ($items as $item) {
+            $_items[] = $this->serializeItem($item);
+        }
+
+        return new Response(json_encode($_items));
+    }
+
+    protected function serializeOrder($order)
+    {
+        $items = $order->getItems()->map(function ($item) {
+            return $item->getId();
+        });
+
+        return array(
+            'id'       => $order->getId(),
+            'due_date' => $order->getDueDate()->format('Y-m-d H:i:s'),
+            'menu_id'  => $order->getMenu()->getId(),
+            'items'    => $items->toArray(),
+        );
+    }
+
+    protected function serializeItem($item)
+    {
+        return array(
+            'id'           => $item->getId(),
+            'menu_item_id' => $item->getMenuItem()->getId(),
+            'amount'       => $item->getAmount(),
+            'order_id'     => $item->getOrder()->getId(),
+        );
     }
 
 }

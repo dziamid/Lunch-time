@@ -12,4 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class ItemRepository extends EntityRepository
 {
+    public function getListQuery()
+    {
+        $qb = $this->createQueryBuilder('i')
+            ->select('i, mi, o')
+            ->innerJoin('i.menu_item', 'mi')
+            ->innerJoin('i.order', 'o');
+
+        return $qb->getQuery();
+    }
 }

@@ -18,17 +18,25 @@ class MenuController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $menus = $em->getRepository('LTDeliveryBundle:Menu')->getListWithItemsQuery()
-            ->getArrayResult();
-        foreach ($menus as &$menu) {
-            //format date into javascript Date parsable format
-            //'October 13, 1975 11:13:00' for mysql's datetime
-            //'October 13, 1975' for mysql's date
-            //$menu['due_date'] = (string)$menu['due_date']->format('F j, Y');
-            $menu['due_date'] = $menu['due_date']->format('Y-m-d H:i:s');
+            ->getResult();
+
+        $_menus = array();
+
+        foreach ($menus as $menu) {
+            $items = $menu->getItems()->map(function ($item) {
+                return $item->getId();
+            });
+
+            $_menus[] = array(
+                'id' => $menu->getId(),
+                'due_date' => $menu->getDueDate()->format('Y-m-d H:i:s'),
+                'items' => $items->toArray(),
+            );
+
         }
 
 
-        return new Response(json_encode($menus));
+        return new Response(json_encode($_menus));
     }
 
     /**
@@ -40,8 +48,18 @@ class MenuController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $items = $em->getRepository('LTDeliveryBundle:Menu\Item')->getListQuery()
-            ->getArrayResult();
+            ->getResult();
 
-        return new Response(json_encode($items));
+        $_items = array();
+
+        foreach ($items as $item) {
+            $_items[] = array(
+                'id' => $item->getId(),
+                'title' => $item->getTitle(),
+                'menu_id' => $item->getMenu()->getId(),
+            );
+        }
+
+        return new Response(json_encode($_items));
     }
 }
