@@ -17,13 +17,13 @@ App.CalendarView = Ember.View.extend({
 
     refresh: function () {
         this.$('.picker').datepicker('refresh');
-        console.log('datepicker refreshed');
+        //console.log('datepicker refreshed');
     }.observes('App.MenuController.content.isLoaded'),
 
     onChangeDate: function () {
         var date = this.get('controller').get('activeDate');
         this.$('.picker').datepicker('setDate', date);
-        console.log('View: Date changed to' + date.toString());
+        //console.log('Date changed to' + date.toString());
 
     }.observes('controller.activeDate')
 });
