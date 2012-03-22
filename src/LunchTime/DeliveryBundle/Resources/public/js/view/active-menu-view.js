@@ -17,3 +17,9 @@ App.MenuItemView = Em.View.extend({
         console.log(newMenu.get('clientId'));
     }
 });
+
+App.NewMenuView = Em.View.extend({
+     click: function () {
+         App.get('MenuController').createMenu('2012-03-16');
+     }
+});

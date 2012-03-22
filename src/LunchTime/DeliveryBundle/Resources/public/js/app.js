@@ -7,7 +7,12 @@ window.App = Ember.Application.create({
         });
 
         App.store.findAll(App.MenuItem);
-        App.setPath('MenuController.content', App.store.findQuery(App.Menu, 'homepageList'));
+
+        var menus = App.store.findQuery(App.Menu, 'homepageList');
+        App.get('MenuController').set('content', menus);
+        App.store.registerModelArray(menus, App.Menu);
+
+        App.set('MenuList', App.store.findAll(App.Menu));
 
         //App.store.findAll(App.OrderItem);
         //App.setPath('OrderController.content', App.store.findQuery(App.Order, 'homepageList'));
