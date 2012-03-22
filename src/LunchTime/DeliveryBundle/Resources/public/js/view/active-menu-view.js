@@ -1,13 +1,19 @@
 App.ActiveMenuView = Em.View.extend({
-     menuBinding: 'App.MenuController.active'
+     menuBinding: 'App.ActiveMenuController.content'
 });
 
 App.MenuItemView = Em.View.extend({
     click: function () {
         console.log('Item clicked');
-        var orderItem = App.OrderItem.create({
-            title: this.item.get('title')
+//        App.store.createRecord(App.MenuItem, {
+//            title: this.item.get('title'),
+//            menu: this.item.get('menu'),
+//            amount: 100
+//        });
+        var newMenu = App.store.createRecord(App.Menu, {
+            dueDate: Date.parse('2012-03-20')
         });
-        App.getPath('OrderController.active.items').pushObject(orderItem);
+
+        console.log(newMenu.get('clientId'));
     }
 });

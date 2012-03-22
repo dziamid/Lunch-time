@@ -11,7 +11,7 @@ window.App = Ember.Application.create({
         //App.store.findAll(App.OrderItem);
         //App.setPath('OrderController.content', App.store.findQuery(App.Order, 'homepageList'));
         //App.setPath('OrderController.active', App.store.createRecord(App.Order));
-        App.setPath('CalendarController.activeDate', Date.parse('2012-03-04'));
+        //App.setPath('CalendarController.activeDate', Date.parse('2012-03-14'));
     }
 });
 
