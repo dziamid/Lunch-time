@@ -1,6 +1,6 @@
 
 App.OrderItem = DS.Model.extend({
-    amount: DS.attr('integer'),
+    amount: DS.attr('number'),
     order: DS.hasOne('App.Order'),
     menuItem: DS.hasOne('App.MenuItem', {key: 'menu_item_id'})
 });

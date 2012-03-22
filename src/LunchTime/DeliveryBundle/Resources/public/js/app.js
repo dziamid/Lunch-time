@@ -2,7 +2,8 @@ window.App = Ember.Application.create({
     ready: function () {
 
         App.store = DS.Store.create({
-            adapter: DS.SymfonyAdapter.create()
+            adapter: DS.SymfonyAdapter.create(),
+            revision: 3
         });
 
         App.store.findAll(App.MenuItem);
