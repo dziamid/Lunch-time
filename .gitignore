@@ -1,6 +1,7 @@
 app/cache/*
 app/logs/*
 vendor/*
+src/LunchTime/DeliveryBundle/Resources/public/js/vendor/*
 web/bundles/*
 web/js/*
 

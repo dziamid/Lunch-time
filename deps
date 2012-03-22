@@ -70,9 +70,9 @@
     target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
 
 [ember-js]
-    git=https://github.com/emberjs/ember.js
+    git=git@github.com:dziamid/ember.js.git
     target=../src/LunchTime/DeliveryBundle/Resources/public/js/vendor/ember-js
 
 [ember-data]
-    git=https://github.com/emberjs/data.git
+    git=git@github.com:dziamid/data.git
     target=../src/LunchTime/DeliveryBundle/Resources/public/js/vendor/ember-data
