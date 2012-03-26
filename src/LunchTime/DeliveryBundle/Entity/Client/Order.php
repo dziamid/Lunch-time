@@ -49,6 +49,11 @@ class Order
     {
         $this->items = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+    public function __toString()
+    {
+        return (string)$this->id;
+    }
     
     /**
      * Add items

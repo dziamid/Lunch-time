@@ -8,6 +8,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 
+use LunchTime\DeliveryBundle\Entity\Client\Order\Item;
+use LunchTime\DeliveryBundle\Form\Client\Order\ItemType;
+use Doctrine\Common\Collections\ArrayCollection;
+
+
 class OrderController extends Controller
 {
     /**
@@ -54,7 +59,29 @@ class OrderController extends Controller
      */
     public function createItemAction()
     {
+        $em = $this->getDoctrine()->getEntityManager();
 
+        $_items = json_decode($this->getRequest()->getContent(), true);
+        $items = new ArrayCollection();
+        foreach ($_items as $_item) {
+            $item = new Item();
+            $form = $this->createForm(new ItemType(), $item);
+            $form->bind($_item);
+            if ($form->isValid()) {
+                $em->persist($item);
+                $items->add($item);
+            }
+        }
+        $em->flush();
+
+        if (count($items) == count($_items)) {
+            return new Response(json_encode($this->serializeItems($items)));
+        }
+
+        return new Response(json_encode(array(
+            'error' => true,
+            'msg' => 'Some items have not been persisted',
+        )));
     }
 
     protected function serializeOrder($order)
@@ -74,10 +101,20 @@ class OrderController extends Controller
     {
         return array(
             'id'           => $item->getId(),
-            'menu_item_id' => $item->getMenuItem()->getId(),
+            'menu_item' => $item->getMenuItem()->getId(),
             'amount'       => $item->getAmount(),
-            'order_id'     => $item->getOrder()->getId(),
+            'order'     => $item->getOrder()->getId(),
         );
+    }
+
+    public function serializeitems($items)
+    {
+        $_items = array();
+        foreach ($items as $item) {
+            $_items[] = $this->serializeItem($item);
+        }
+
+        return $_items;
     }
 
 }

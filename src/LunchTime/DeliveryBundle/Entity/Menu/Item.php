@@ -33,6 +33,11 @@ class Item
      */
     private $menu;
 
+    public function __toString()
+    {
+        return (string)$this->title;
+    }
+
     /**
      * Get id
      *

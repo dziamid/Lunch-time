@@ -16,4 +16,16 @@ window.App = Ember.Application.create({
     }
 });
 
+App.Model = DS.Model.extend({
+    namingConvention: {
+        keyToJSONKey: function (key) {
+            return Ember.String.decamelize(key);
+        },
+
+        foreignKey: function (key) {
+            //don't add _id
+            return Ember.String.decamelize(key);
+        }
+    }
+});
 

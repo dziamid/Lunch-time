@@ -1,6 +1,6 @@
 
 //Menu model
-App.Menu = DS.Model.extend({
+App.Menu = App.Model.extend({
     dueDate: DS.attr('date', {key: 'due_date'}),
     dueDateString: function() {
         return this.get('dueDate').toString('d MMMM');

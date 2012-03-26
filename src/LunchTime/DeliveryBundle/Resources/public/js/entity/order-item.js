@@ -1,8 +1,8 @@
 
-App.OrderItem = DS.Model.extend({
+App.OrderItem = App.Model.extend({
     amount: DS.attr('number', {defaultValue: 1}),
-    order: DS.hasOne('App.Order'),
-    menuItem: DS.hasOne('App.MenuItem', {key: 'menu_item_id'})
+    order: DS.hasOne('App.Order', {key: 'order'}),
+    menuItem: DS.hasOne('App.MenuItem', {key: 'menu_item'})
 });
 
 App.OrderItem.reopenClass({

@@ -11,7 +11,7 @@ DS.attr.transforms.date = {
             return null;
         }
     },
-    to: function(date, format) {
+    to: function (date, format) {
         if (format === undefined) {
             format = 'yyyy-MM-dd hh:mm:ss';
         }
