@@ -1,3 +1,3 @@
-App.OrderView = Em.View.extend({
-     orderBinding: 'App.OrderController.active'
+App.ActiveOrderView = Em.View.extend({
+     orderBinding: 'App.ActiveOrderController.content'
 });

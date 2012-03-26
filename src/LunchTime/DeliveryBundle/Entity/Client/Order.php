@@ -27,11 +27,6 @@ class Order
     private $items;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\LunchTime\DeliveryBundle\Entity\Menu")
-     */
-    private $menu;
-
-    /**
      * @var date $due_date
      *
      * @ORM\Column(name="due_date", type="date")
@@ -73,26 +68,6 @@ class Order
     public function getItems()
     {
         return $this->items;
-    }
-
-    /**
-     * Set menu
-     *
-     * @param LunchTime\DeliveryBundle\Entity\Menu $menu
-     */
-    public function setMenu(\LunchTime\DeliveryBundle\Entity\Menu $menu)
-    {
-        $this->menu = $menu;
-    }
-
-    /**
-     * Get menu
-     *
-     * @return LunchTime\DeliveryBundle\Entity\Menu 
-     */
-    public function getMenu()
-    {
-        return $this->menu;
     }
 
     /**

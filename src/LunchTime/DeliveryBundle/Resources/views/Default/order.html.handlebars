@@ -1,11 +1,11 @@
 {% raw %}
-{{#view App.OrderView id="active-order"}}
+{{#view App.ActiveOrderView id="active-order"}}
     {{#with order }}
-    <h1>{{menu.dueDateString}}</h1>
+    <h1>{{dueDateString}}</h1>
     <ul>
         {{#each items}}
         <li>
-            {{id}} - {{menuItem.title}}
+            {{menuItem.title}}
         </li>
         {{/each}}
     </ul>

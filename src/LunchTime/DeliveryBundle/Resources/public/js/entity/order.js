@@ -1,9 +1,10 @@
 
 App.Order = DS.Model.extend({
-    items: DS.hasMany('App.OrderItem', {
-        embedded: true
-    }),
-    menu: DS.hasOne('App.Menu', {key: 'menu_id'})
+    dueDate: DS.attr('date', {key: 'due_date'}),
+    dueDateString: function() {
+        return this.get('dueDate').toString('d MMMM');
+    }.property('dueDate'),
+    items: DS.hasMany('App.OrderItem')
 });
 
 App.Order.reopenClass({

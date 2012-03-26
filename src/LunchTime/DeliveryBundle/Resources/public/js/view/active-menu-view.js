@@ -3,17 +3,17 @@ App.ActiveMenuView = Em.View.extend({
 });
 
 App.MenuItemView = Em.View.extend({
-    click: function () {
-        console.log('Item clicked');
-//        App.store.createRecord(App.MenuItem, {
-//            title: this.item.get('title'),
-//            menu: this.item.get('menu'),
-//            amount: 100
-//        });
-        var newMenu = App.store.createRecord(App.Menu, {
-            dueDate: Date.parse('2012-03-20')
-        });
+    item: null,
 
-        console.log(newMenu.get('clientId'));
+    click: function () {
+        var item = this.get('item');
+
+        console.log('Menu Item clicked, id: ' + item.get('id'));
+
+        var newItem = App.OrderItem.createRecord({
+            menuItem: item
+        });
+        App.getPath('ActiveOrderController.content.items').pushObject(newItem);
+
     }
 });

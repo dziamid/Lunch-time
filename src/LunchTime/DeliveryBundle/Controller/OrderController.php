@@ -56,7 +56,6 @@ class OrderController extends Controller
         return array(
             'id'       => $order->getId(),
             'due_date' => $order->getDueDate()->format('Y-m-d H:i:s'),
-            'menu_id'  => $order->getMenu()->getId(),
             'items'    => $items->toArray(),
         );
     }

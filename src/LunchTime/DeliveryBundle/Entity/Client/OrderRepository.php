@@ -15,9 +15,8 @@ class OrderRepository extends EntityRepository
     public function getListWithItemsQuery()
     {
         $qb = $this->createQueryBuilder('o')
-            ->select('o, i, m')
-            ->leftJoin('o.items', 'i')
-            ->leftJoin('o.menu', 'm');
+            ->select('o, i')
+            ->leftJoin('o.items', 'i');
 
         return $qb->getQuery();
     }

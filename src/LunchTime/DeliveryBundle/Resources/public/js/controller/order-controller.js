@@ -1,10 +1,12 @@
 App.set('OrderController', Ember.ArrayProxy.create({
-    content: [],
+    content: []
+}));
 
-    active: function () {
-        return this.content.find(function (order) {
-            //find first
+App.set('ActiveOrderController', Ember.Object.create({
+    content: function () {
+        //find the first order in array
+        return App.get('OrderController').find(function () {
             return true;
         });
-    }.property('content.@each')
+    }.property('App.OrderController.@each')
 }));
