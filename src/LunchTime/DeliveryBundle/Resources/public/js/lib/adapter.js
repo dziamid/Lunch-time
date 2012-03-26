@@ -43,6 +43,37 @@ DS.SymfonyAdapter = DS.RESTAdapter.extend({
         });
     },
 
+    createRecord: function (store, type, model) {
+        var url = this.rootForType(type);
+
+        var data = model.toJSON();
+
+        this.ajax(url, "POST", {
+            data: data,
+            success: function (json) {
+                this.sideload(store, type, json, root);
+                store.didCreateRecord(model, json[root]);
+            }
+        });
+    },
+
+    createRecords: function (store, type, models) {
+        var url = this.rootForType(type);
+
+        var data = models.map(function (model) {
+            return model.toJSON();
+        });
+
+        this.ajax(url, "POST", {
+            data: data,
+
+            success: function (json) {
+                this.sideload(store, type, json, plural);
+                store.didCreateRecords(type, models, json[plural]);
+            }
+        });
+    },
+
     rootForType: function (type) {
         var base = this.getBaseUrl();
         var url;

@@ -4,6 +4,7 @@ namespace LunchTime\DeliveryBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,6 +31,7 @@ class OrderController extends Controller
 
     /**
      * @Route("/order/item")
+     * @Method("GET")
      */
     public function itemsAction()
     {
@@ -45,6 +47,14 @@ class OrderController extends Controller
         }
 
         return new Response(json_encode($_items));
+    }
+    /**
+     * @Route("/order/item")
+     * @Method("POST")
+     */
+    public function createItemAction()
+    {
+
     }
 
     protected function serializeOrder($order)

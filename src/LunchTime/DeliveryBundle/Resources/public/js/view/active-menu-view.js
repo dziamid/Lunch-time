@@ -7,13 +7,13 @@ App.MenuItemView = Em.View.extend({
 
     click: function () {
         var item = this.get('item');
-
+        var order = App.getPath('ActiveOrderController.content');
         console.log('Menu Item clicked, id: ' + item.get('id'));
 
-        var newItem = App.OrderItem.createRecord({
-            menuItem: item
-        });
-        App.getPath('ActiveOrderController.content.items').pushObject(newItem);
+        order.get('items').pushObject(App.OrderItem.createRecord({
+            menuItem: item,
+            order: order
+        }));
 
     }
 });
