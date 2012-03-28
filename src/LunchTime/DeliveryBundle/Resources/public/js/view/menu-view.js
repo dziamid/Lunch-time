@@ -1,4 +1,4 @@
-App.ActiveMenuView = Em.View.extend({
+App.MenuView = Em.View.extend({
      menuBinding: 'App.ActiveMenuController.content'
 });
 
