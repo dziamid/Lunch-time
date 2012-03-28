@@ -44,18 +44,7 @@ DS.SymfonyAdapter = DS.RESTAdapter.extend({
     },
 
     createRecord: function (store, type, model) {
-        var url = this.getUrl(type);
-
-        var data = [];
-        data.push(model.toJSON());
-
-        this.ajax(url, "POST", {
-            data: data,
-            success: function (json) {
-                this.sideload(store, type, json);
-                store.didCreateRecord(model, json);
-            }
-        });
+        console.log('createRecord called');
     },
 
     createRecords: function (store, type, models) {
@@ -70,6 +59,26 @@ DS.SymfonyAdapter = DS.RESTAdapter.extend({
             success: function (json) {
                 this.sideload(store, type, json);
                 store.didCreateRecords(type, models, json);
+            }
+        });
+    },
+
+    updateRecord: function (store, type, model) {
+        console.log('updateRecord called');
+    },
+
+    updateRecords: function (store, type, models) {
+        var url = this.getUrl(type);
+
+        var data = models.map(function (model) {
+            return model.toJSON();
+        });
+
+        this.ajax(url, "PUT", {
+            data: data,
+            success: function (json) {
+                this.sideload(store, type, json);
+                store.didUpdateRecords(models, json);
             }
         });
     },
@@ -97,7 +106,7 @@ DS.SymfonyAdapter = DS.RESTAdapter.extend({
     },
 
     sideload: function (store, type, json) {
-        json.forEach(function(item) {
+        json.forEach(function (item) {
             store.load(type, item);
         });
     }

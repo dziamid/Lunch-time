@@ -9,9 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 
 use LunchTime\DeliveryBundle\Entity\Client\Order\Item;
+
 use LunchTime\DeliveryBundle\Form\Client\Order\ItemType;
 use Doctrine\Common\Collections\ArrayCollection;
-
 
 class OrderController extends Controller
 {
@@ -53,11 +53,12 @@ class OrderController extends Controller
 
         return new Response(json_encode($_items));
     }
+
     /**
      * @Route("/order/item")
      * @Method("POST")
      */
-    public function createItemAction()
+    public function createItemsAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -77,12 +78,51 @@ class OrderController extends Controller
         $_items = $this->serializeItems($items);
         return new Response(json_encode($_items));
 
+    }
+
+    /**
+     * @Route("/order/item")
+     * @Method("PUT")
+     */
+    public function updateItemsAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $_items = json_decode($this->getRequest()->getContent(), true);
+        $_ids = array_map(function ($item) { return $item['id'];}, $_items);
+        /** @var $items ArrayCollection */
+        $items = $em->getRepository('LTDeliveryBundle:Client\Order\Item')->getListByIds($_ids)
+                    ->getResult();
+
+        foreach ($_items as $_item) {
+            $item = array_filter($items, function($item) use ($_item) {
+                return $item->getId() == $_item['id'];
+            });
+            $item = array_shift($item);
+            if (false == $item) {
+                //don't update items that are not present
+                //may occur if item is already deleted
+                continue;
+            }
+
+            $form = $this->createForm(new ItemType(), $item);
+            unset($_item['id']);
+            $form->bind($_item);
+            if ($form->isValid()) {
+                $em->persist($item);
+            }
+        }
+        $em->flush();
+
+        $_items = $this->serializeItems($items);
+        return new Response(json_encode($_items));
 
     }
 
     protected function serializeOrder($order)
     {
-        $items = $order->getItems()->map(function ($item) {
+        $items = $order->getItems()->map(function ($item)
+        {
             return $item->getId();
         });
 
@@ -97,9 +137,9 @@ class OrderController extends Controller
     {
         return array(
             'id'           => $item->getId(),
-            'menu_item' => $item->getMenuItem()->getId(),
+            'menu_item'    => $item->getMenuItem()->getId(),
             'amount'       => $item->getAmount(),
-            'order'     => $item->getOrder()->getId(),
+            'order'        => $item->getOrder()->getId(),
         );
     }
 

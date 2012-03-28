@@ -21,4 +21,15 @@ class ItemRepository extends EntityRepository
 
         return $qb->getQuery();
     }
+
+    public function getListByIds(array $ids)
+    {
+        $qb = $this->createQueryBuilder('i');
+
+        $qb->select('i')
+            ->add('where', $qb->expr()->in('i.id', '?1'))
+            ->setParameter('1', $ids);
+
+        return $qb->getQuery();
+    }
 }

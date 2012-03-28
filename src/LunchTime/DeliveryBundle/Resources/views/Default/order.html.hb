@@ -5,7 +5,7 @@
     <ul>
         {{#each items}}
         <li>
-            {{menuItem.title}}
+            {{menuItem.title}} - {{amount}}
         </li>
         {{/each}}
     </ul>
