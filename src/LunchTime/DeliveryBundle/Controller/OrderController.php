@@ -74,14 +74,10 @@ class OrderController extends Controller
         }
         $em->flush();
 
-        if (count($items) == count($_items)) {
-            return new Response(json_encode($this->serializeItems($items)));
-        }
+        $_items = $this->serializeItems($items);
+        return new Response(json_encode($_items));
 
-        return new Response(json_encode(array(
-            'error' => true,
-            'msg' => 'Some items have not been persisted',
-        )));
+
     }
 
     protected function serializeOrder($order)

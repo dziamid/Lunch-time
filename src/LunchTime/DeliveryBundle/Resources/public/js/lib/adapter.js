@@ -77,10 +77,7 @@ DS.SymfonyAdapter = DS.RESTAdapter.extend({
     getUrl: function (type) {
         return this.getBaseUrl() + type.url;
     },
-    
-    getFormName: function (type) {
-        return type.paramName;
-    },
+
 
     /**
      * Returns a base url without the trailing slash, optionally with symfony controller
@@ -97,6 +94,13 @@ DS.SymfonyAdapter = DS.RESTAdapter.extend({
             url = url + "/" + controller;
         }
         return  url;
+    },
+
+    sideload: function (store, type, json) {
+        json.forEach(function(item) {
+            store.load(type, item);
+        });
     }
+
 
 });
