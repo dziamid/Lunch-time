@@ -5,7 +5,10 @@
     <ul>
         {{#each items}}
         <li>
-            {{menuItem.title}} - {{amount}}
+            {{#view App.OrderItemView itemBinding="this"}}
+                {{item.menuItem.title}} - {{item.amount}} -
+                <a href="#" {{action "remove"}}>-1</a>
+            {{/view}}
         </li>
         {{/each}}
     </ul>

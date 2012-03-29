@@ -89,13 +89,17 @@ class OrderController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $_items = json_decode($this->getRequest()->getContent(), true);
-        $_ids = array_map(function ($item) { return $item['id'];}, $_items);
-        /** @var $items ArrayCollection */
+        $_ids = array_map(function ($item)
+        {
+            return $item['id'];
+        }, $_items);
+
         $items = $em->getRepository('LTDeliveryBundle:Client\Order\Item')->getListByIds($_ids)
-                    ->getResult();
+            ->getResult();
 
         foreach ($_items as $_item) {
-            $item = array_filter($items, function($item) use ($_item) {
+            $item = array_filter($items, function($item) use ($_item)
+            {
                 return $item->getId() == $_item['id'];
             });
             $item = array_shift($item);
@@ -117,6 +121,35 @@ class OrderController extends Controller
         $_items = $this->serializeItems($items);
         return new Response(json_encode($_items));
 
+    }
+
+    /**
+     * @Route("/order/item")
+     * @Method("DELETE")
+     */
+    public function deleteItemsAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $_ids = json_decode($this->getRequest()->getContent(), true);
+        $items = $em->getRepository('LTDeliveryBundle:Client\Order\Item')->getListByIds($_ids)
+            ->getResult();
+
+        foreach ($items as $item) {
+            $em->remove($item);
+        }
+
+        $em->flush();
+
+        return new Response(json_encode($this->serializeItems($items)));
+
+    }
+
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder(array('id' => $id))
+            ->add('id', 'hidden')
+            ->getForm();
     }
 
     protected function serializeOrder($order)
@@ -143,7 +176,7 @@ class OrderController extends Controller
         );
     }
 
-    public function serializeitems($items)
+    protected function serializeItems($items)
     {
         $_items = array();
         foreach ($items as $item) {

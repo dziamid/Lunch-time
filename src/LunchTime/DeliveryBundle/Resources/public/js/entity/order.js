@@ -13,9 +13,16 @@ App.Order = App.Model.extend({
             });
             this.get('items').pushObject(newItem);
         } else {
-            newItem.set('amount', newItem.get('amount') + 1);
+            newItem.incAmount();
         }
 
+    },
+    removeItem: function (item) {
+        if (item.get('amount') > 1) {
+            item.decAmount();
+        } else {
+            item.deleteRecord();
+        }
     }
 });
 
