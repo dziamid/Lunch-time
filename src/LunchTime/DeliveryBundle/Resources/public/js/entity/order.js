@@ -21,6 +21,7 @@ App.Order = App.Model.extend({
         if (item.get('amount') > 1) {
             item.decAmount();
         } else {
+            this.get('items').removeObject(item);
             item.deleteRecord();
         }
     }
