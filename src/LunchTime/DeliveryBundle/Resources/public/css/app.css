@@ -1,21 +1,8 @@
-.ember-view {
-    padding: 5px;
-    border: 1px solid #ccc;
-}
-
 .col {
     width: 50%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     margin: 0;
     float: left;
-}
-
-.clear-float:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
 }
 
