@@ -1,5 +1,13 @@
 {% extends 'LTDeliveryBundle::layout.html.twig' %}
 
 {% block body %}
-<div>Main block of app</div>
+
+<ul data-bind="foreach: menus">
+    <li>
+        <span data-bind="text: title"></span>
+        <span style="color: #ccc" data-bind="text: new Date()"></span>
+    </li>
+</ul>
+<button data-bind="click: reloadMenus">Reload</button>
+
 {% endblock %}

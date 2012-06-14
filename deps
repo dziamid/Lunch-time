@@ -69,10 +69,5 @@
     git=https://github.com/symfony/DoctrineFixturesBundle.git
     target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
 
-[ember-js]
-    git=git@github.com:dziamid/ember.js.git
-    target=../src/LunchTime/DeliveryBundle/Resources/public/js/vendor/ember-js
-
-[ember-data]
-    git=git@github.com:dziamid/data.git
-    target=../src/LunchTime/DeliveryBundle/Resources/public/js/vendor/ember-data
+[knockout-js]
+    git=git://github.com/SteveSanderson/knockout.git
