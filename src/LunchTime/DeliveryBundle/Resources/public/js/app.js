@@ -1,54 +1,54 @@
+var Menu = function (data) {
+    var self = this;
+    data = data || {};
+    self.id = data.id || null;
+    self.title = data.title || null;
+};
 
-function Menu(id, title) {
-    return {
-        id: id,
-        title: title
+var MenuItem = function (data) {
+    var self = this;
+    data = data || {};
+    self.id = data.id || null;
+    self.title = data.title || null;
+    self.price = parseFloat(data.price) || null;
+    self.menuId = data.menuId || null;
+
+};
+
+var OrderItem = function (data) {
+    var self = this;
+    data = data || {};
+    self.menuItem = ko.observable(data.menuItem || null);
+    self.amount = ko.observable(data.amount || null);
+    self.title = function () {
+        return this.menuItem().title;
+    };
+    self.price = function () {
+        return this.menuItem().price * this.amount();
+    };
+    self.addOne = function () {
+        return this.amount(this.amount() + 1);
+    };
+    self.removeOne = function () {
+        return this.amount(this.amount() - 1);
     };
 }
 
-function MenuItem(id, menuId, title, price) {
-    return {
-        id: id,
-        title: title,
-        price: parseFloat(price),
-        menuId: menuId
-    };
-}
-
-function OrderItem(menuItem, amount) {
-    return {
-        menuItem: ko.observable(menuItem),
-        amount: ko.observable(amount),
-        title: function () {
-            return this.menuItem().title;
-        },
-        price: function () {
-            return this.menuItem().price * this.amount();
-        },
-        addOne: function () {
-            return this.amount(this.amount() + 1);
-        },
-        removeOne: function () {
-            return this.amount(this.amount() - 1);
-        }
-    };
-}
-
-function MenuVM(activeMenuId) {
+var MenuVM = function (config) {
     var self = this;
 
     self.menus = ko.observableArray([
-        new Menu(1, 'Yesterday'),
-        new Menu(2, 'Today'),
-        new Menu(3, 'Tomorrow')
+        new Menu({id: 1, title: 'Yesterday'}),
+        new Menu({id: 2, title: 'Today'}),
+        new Menu({id: 3, title: 'Tomorrow'})
     ]);
 
     self.menuItems = ko.observableArray([
-        new MenuItem(1, 1, 'Spagetti', 32800),
-        new MenuItem(2, 1, 'Makaroni', 18100),
-        new MenuItem(3, 2, 'Plov', 20500),
-        new MenuItem(4, 2, 'Super sup', 5450),
-        new MenuItem(5, 3, 'Govno sup', 1300)
+        new MenuItem({id: 1, menuId: 1, title: 'Spagetti', price: 32800}),
+        new MenuItem({id: 2, menuId: 1, title: 'Makaroni', price: 32000}),
+        new MenuItem({id: 3, menuId: 2, title: 'Plov', price: 45000}),
+        new MenuItem({id: 4, menuId: 2, title: 'Sup', price: 8900}),
+        new MenuItem({id: 5, menuId: 3, title: 'Capuccino', price: 12000})
     ]);
 
     self.findMenu = function (id) {
@@ -68,7 +68,7 @@ function MenuVM(activeMenuId) {
     };
     self.activeMenu = ko.observable();
     self.activeMenuItems = ko.observableArray();
-    self.activateMenu = function(menu) {
+    self.activateMenu = function (menu) {
         self.activeMenu(menu);
         self.activeMenuItems(self.findMenuItems(menu.id));
     };
@@ -85,7 +85,7 @@ function MenuVM(activeMenuId) {
         if (item) {
             item.addOne();
         } else {
-            item = new OrderItem(menuItem, 1);
+            item = new OrderItem({menuItem: menuItem, amount: 1});
             self.orderItems.push(item);
         }
 
@@ -104,7 +104,7 @@ function MenuVM(activeMenuId) {
     self.orderTotal = ko.dependentObservable(function () {
         var total = 0;
 
-        ko.utils.arrayForEach(self.orderItems(), function(item) {
+        ko.utils.arrayForEach(self.orderItems(), function (item) {
             total += item.price();
         });
 
@@ -112,11 +112,12 @@ function MenuVM(activeMenuId) {
     });
 
     //initial data
-    self.activateMenu(self.findMenu(activeMenuId));
+    self.activateMenu(self.findMenu(config.activeMenuId));
     self.addToOrder(self.findMenuItem(1));
 
-};
+}
+;
 
-var viewModel = new MenuVM(2);
+var viewModel = new MenuVM({activeMenuId: 2});
 ko.applyBindings(viewModel);
 
