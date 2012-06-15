@@ -1,7 +1,7 @@
 LTDeliveryBundle:
     resource: "@LTDeliveryBundle/Controller/"
     type:     annotation
-    prefix:   /
+    prefix:   /main
 
 # Internal routing configuration to handle ESI
 #_internal:

@@ -2,12 +2,43 @@
 
 {% block body %}
 
-<ul data-bind="foreach: menus">
-    <li>
+
+<h3>Calendar</h3>
+
+<ul class="calendar list" data-bind="foreach: menus">
+    <li class="item clickable" data-bind="click: $root.activateMenu, css: {active: $root.isActiveMenu($data)}">
         <span data-bind="text: title"></span>
-        <span style="color: #ccc" data-bind="text: new Date()"></span>
     </li>
 </ul>
-<button data-bind="click: reloadMenus">Reload</button>
+
+<h3>Menu for <span data-bind="text: activeMenu().title"></span></h3>
+
+<div class="menu">
+    <ul class="menu-items list" data-bind="foreach: activeMenuItems">
+        <li class="item clickable" data-bind="click: $root.addToOrder">
+            <span class="title" data-bind="text: title"></span>
+            <span data-bind="text: price"></span>
+        </li>
+    </ul>
+</div>
+
+
+<h3>Your order:</h3>
+
+<div class="order">
+
+    <ul class="order-items list" data-bind="foreach: orderItems">
+        <li class="item">
+            <span class="title" data-bind="text: title()"></span>
+            <span data-bind="text: amount()"></span>
+            <span class="clickable" data-bind="click: $root.removeFromOrder">-1</span>
+            <span class="clickable" data-bind="click: $data.addOne">+1</span>
+        </li>
+    </ul>
+    <div class="total">
+        Total: <span data-bind="text: orderTotal()"></span>
+    </div>
+</div>
+
 
 {% endblock %}

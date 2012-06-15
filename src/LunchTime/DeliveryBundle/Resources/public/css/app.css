@@ -1,3 +1,18 @@
+body {
+    font-family: Helvetica, "Helvetica Neue";
+    background-color:#528CE0;
+
+}
+.body {
+    background-color: white;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding: 20px 40px;
+    margin: 40px;
+}
+
+
 .col {
     width: 50%;
     box-sizing: border-box;
@@ -6,3 +21,46 @@
     float: left;
 }
 
+.list {
+    display: table-row;
+}
+.item {
+    cursor: pointer;
+    background: #ccc;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin: 5px;
+    list-style: none;
+}
+.item span {
+    display: table-cell;
+    padding: 5px 10px;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
+.calendar.list {
+    display: table-row;
+}
+.calendar .item {
+    display: table-cell;
+
+}
+.clickable:hover,
+.item.active {
+    background: black;
+    color: white;
+}
+
+.order-items .title {
+    width: 250px;
+}
+.menu, .order {
+    width: 300px;
+}
+.menu .title {
+    width: 250px;
+}
