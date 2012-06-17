@@ -1,11 +1,16 @@
-var Menu = function (data) {
+//this is to suppress undefined variable highlights
+//need to refactor it to closure modules
+var LT = typeof window.LT !== 'undefined' ? window.LT : {};
+LT.config = typeof LT.config !== 'undefined' ? LT.config : {};
+
+LT.Menu = function (data) {
     var self = this;
     data = data || {};
     self.id = data.id || null;
     self.title = data.title || null;
 };
 
-var MenuItem = function (data) {
+LT.MenuItem = function (data) {
     var self = this;
     data = data || {};
     self.id = data.id || null;
@@ -15,7 +20,7 @@ var MenuItem = function (data) {
 
 };
 
-var OrderItem = function (data) {
+LT.OrderItem = function (data) {
     var self = this;
     data = data || {};
     self.menuItem = ko.observable(data.menuItem || null);
@@ -32,23 +37,23 @@ var OrderItem = function (data) {
     self.removeOne = function () {
         return this.amount(this.amount() - 1);
     };
-}
+};
 
-var MenuVM = function (config) {
+LT.viewModel = new (function(config) {
     var self = this;
 
     self.menus = ko.observableArray([
-        new Menu({id: 1, title: 'Yesterday'}),
-        new Menu({id: 2, title: 'Today'}),
-        new Menu({id: 3, title: 'Tomorrow'})
+        new LT.Menu({id: 1, title: 'Yesterday'}),
+        new LT.Menu({id: 2, title: 'Today'}),
+        new LT.Menu({id: 3, title: 'Tomorrow'})
     ]);
 
     self.menuItems = ko.observableArray([
-        new MenuItem({id: 1, menuId: 1, title: 'Spagetti', price: 32800}),
-        new MenuItem({id: 2, menuId: 1, title: 'Makaroni', price: 32000}),
-        new MenuItem({id: 3, menuId: 2, title: 'Plov', price: 45000}),
-        new MenuItem({id: 4, menuId: 2, title: 'Sup', price: 8900}),
-        new MenuItem({id: 5, menuId: 3, title: 'Capuccino', price: 12000})
+        new LT.MenuItem({id: 1, menuId: 1, title: 'Spagetti', price: 32800}),
+        new LT.MenuItem({id: 2, menuId: 1, title: 'Makaroni', price: 32000}),
+        new LT.MenuItem({id: 3, menuId: 2, title: 'Plov', price: 45000}),
+        new LT.MenuItem({id: 4, menuId: 2, title: 'Sup', price: 8900}),
+        new LT.MenuItem({id: 5, menuId: 3, title: 'Capuccino', price: 12000})
     ]);
 
     self.findMenu = function (id) {
@@ -85,7 +90,7 @@ var MenuVM = function (config) {
         if (item) {
             item.addOne();
         } else {
-            item = new OrderItem({menuItem: menuItem, amount: 1});
+            item = new LT.OrderItem({menuItem: menuItem, amount: 1});
             self.orderItems.push(item);
         }
 
@@ -115,9 +120,7 @@ var MenuVM = function (config) {
     self.activateMenu(self.findMenu(config.activeMenuId));
     self.addToOrder(self.findMenuItem(1));
 
-}
-;
+})(LT.config);
 
-var viewModel = new MenuVM({activeMenuId: 2});
-ko.applyBindings(viewModel);
+ko.applyBindings(LT.viewModel);
 

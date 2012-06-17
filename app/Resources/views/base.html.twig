@@ -22,9 +22,9 @@
     <!--[if IE]>
     <style>
         .clear-float {
-        zoom: 1;
-        display: block;
-    }
+            zoom: 1;
+            display: block;
+        }
     </style>
     <![endif]-->
 
@@ -34,6 +34,15 @@
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
+    <!-- global namespace of the app -->
+    {% block app %}
+    <script type="text/javascript">
+        var LT = {};
+        window.LT = LT;
+        LT.config = {};
+    </script>
+    {% endblock %}
 </head>
 <body>
 

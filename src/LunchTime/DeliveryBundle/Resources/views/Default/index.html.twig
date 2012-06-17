@@ -1,5 +1,12 @@
 {% extends 'LTDeliveryBundle::layout.html.twig' %}
 
+{% block app %}
+{{ parent() }}
+<script type="text/javascript">
+    LT.config.activeMenuId = 3;
+</script>
+{% endblock %}
+
 {% block body %}
 
 
