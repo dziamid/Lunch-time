@@ -2,12 +2,21 @@
 //need to refactor it to closure modules
 var LT = typeof window.LT !== 'undefined' ? window.LT : {};
 LT.config = typeof LT.config !== 'undefined' ? LT.config : {};
+ko.forEach = ko.utils.arrayForEach;
 
 LT.Menu = function (data) {
     var self = this;
     data = data || {};
     self.id = data.id || null;
-    self.title = data.title || null;
+    self.date = ko.observable(data.date || null);
+    self.items = ko.observableArray([]);
+    data.items = data.items || [];
+    for (var i = 0; i < data.items.length; i++) {
+        self.items.push(new LT.MenuItem(data.items[i]));
+    }
+    self.title = ko.computed(function () {
+        return self.date();
+    });
 };
 
 LT.MenuItem = function (data) {
@@ -16,7 +25,6 @@ LT.MenuItem = function (data) {
     self.id = data.id || null;
     self.title = data.title || null;
     self.price = parseFloat(data.price) || null;
-    self.menuId = data.menuId || null;
 
 };
 
@@ -42,43 +50,26 @@ LT.OrderItem = function (data) {
 LT.viewModel = new (function(config) {
     var self = this;
 
-    self.menus = ko.observableArray([
-        new LT.Menu({id: 1, title: 'Yesterday'}),
-        new LT.Menu({id: 2, title: 'Today'}),
-        new LT.Menu({id: 3, title: 'Tomorrow'})
-    ]);
+    self.menus = ko.observableArray([]);
 
-    self.menuItems = ko.observableArray([
-        new LT.MenuItem({id: 1, menuId: 1, title: 'Spagetti', price: 32800}),
-        new LT.MenuItem({id: 2, menuId: 1, title: 'Makaroni', price: 32000}),
-        new LT.MenuItem({id: 3, menuId: 2, title: 'Plov', price: 45000}),
-        new LT.MenuItem({id: 4, menuId: 2, title: 'Sup', price: 8900}),
-        new LT.MenuItem({id: 5, menuId: 3, title: 'Capuccino', price: 12000})
-    ]);
+    config.menus = config.menus || [];
+    for (var i = 0; i < config.menus.length; i++) {
+        self.menus.push(new LT.Menu(config.menus[i]));
+    }
 
-    self.findMenu = function (id) {
-        return ko.utils.arrayFirst(self.menus(), function (o) {
-            return id == o.id;
-        });
-    };
-    self.findMenuItem = function (id) {
-        return ko.utils.arrayFirst(self.menuItems(), function (o) {
-            return id == o.id;
-        });
-    };
-    self.findMenuItems = function (menuId) {
-        return ko.utils.arrayFilter(self.menuItems(), function (item) {
-            return menuId == item.menuId;
-        });
-    };
-    self.activeMenu = ko.observable();
-    self.activeMenuItems = ko.observableArray();
+//    ko.utils.arrayForEach(config.menus, function (data) {
+//        self.menus.push(new LT.Menu(data));
+//    });
+
+    //TODO: writable computed observable
+    self.activeMenu = ko.observable(null);
     self.activateMenu = function (menu) {
         self.activeMenu(menu);
-        self.activeMenuItems(self.findMenuItems(menu.id));
     };
+
+    //TODO: ko.computed
     self.isActiveMenu = function (menu) {
-        return menu.id == self.activeMenu().id;
+        return menu == self.activeMenu();
     };
 
     //order
@@ -117,8 +108,7 @@ LT.viewModel = new (function(config) {
     });
 
     //initial data
-    self.activateMenu(self.findMenu(config.activeMenuId));
-    self.addToOrder(self.findMenuItem(1));
+    self.activateMenu(self.menus()[0]);
 
 })(LT.config);
 

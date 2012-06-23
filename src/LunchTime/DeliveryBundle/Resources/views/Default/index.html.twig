@@ -3,7 +3,9 @@
 {% block app %}
 {{ parent() }}
 <script type="text/javascript">
-    LT.config.activeMenuId = 3;
+    //lets make active menu to be the first one in the list
+    //LT.config.activeMenuId = 3;
+    LT.config.menus = {{ menus | json_encode() | raw }};
 </script>
 {% endblock %}
 
@@ -18,16 +20,19 @@
     </li>
 </ul>
 
-<h3>Menu for <span data-bind="text: activeMenu().title"></span></h3>
+<div id="active-menu" data-bind="with: activeMenu">
+    <h3>Menu for <span data-bind="text: title"></span></h3>
 
-<div class="menu">
-    <ul class="menu-items list" data-bind="foreach: activeMenuItems">
-        <li class="item clickable" data-bind="click: $root.addToOrder">
-            <span class="title" data-bind="text: title"></span>
-            <span data-bind="text: price"></span>
-        </li>
-    </ul>
+    <div class="menu">
+        <ul class="menu-items list" data-bind="foreach: items">
+            <li class="item clickable" data-bind="click: $root.addToOrder">
+                <span class="title" data-bind="text: title"></span>
+                <span data-bind="text: price"></span>
+            </li>
+        </ul>
+    </div>
 </div>
+
 
 
 <h3>Your order:</h3>
