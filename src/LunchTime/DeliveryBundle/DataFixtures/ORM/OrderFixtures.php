@@ -13,7 +13,6 @@ class OrderFixtures extends AbstractFixture implements FixtureInterface, Ordered
     public function load(ObjectManager $manager)
     {
         $order = new Order();
-        $order->setMenu($this->getReference('menu-1'));
         $order->setDueDate(new \DateTime());
         $manager->persist($order);
 

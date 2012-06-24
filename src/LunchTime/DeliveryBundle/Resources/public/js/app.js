@@ -7,7 +7,7 @@ ko.forEach = ko.utils.arrayForEach;
 LT.Menu = function (data) {
     var self = this;
     data = data || {};
-    self.id = data.id || null;
+    self.id = ko.observable(data.id || null);
     self.date = ko.observable(data.date || null);
     self.items = ko.observableArray([]);
     data.items = data.items || [];
@@ -22,32 +22,73 @@ LT.Menu = function (data) {
 LT.MenuItem = function (data) {
     var self = this;
     data = data || {};
-    self.id = data.id || null;
-    self.title = data.title || null;
-    self.price = parseFloat(data.price) || null;
+    self.id = ko.observable(data.id || null);
+    self.title = ko.observable(data.title || null);
+    self.price = ko.observable(parseFloat(data.price) || null);
+};
 
+LT.Order = function (data) {
+    var self = this;
+    data = data || {};
+    self.items = ko.observableArray([]);
+    data.items = data.items || [];
+    for (var i = 0; i < data.items.length; i++) {
+        self.items.push(new LT.OrderItem(data.items[i]));
+    }
+    self.totalPrice = ko.computed(function () {
+        var total = 0;
+
+        ko.utils.arrayForEach(self.items(), function (item) {
+            total += item.price();
+        });
+
+        return total;
+    });
+
+    self.addMenuItem = function (menuItem) {
+
+        var item = ko.utils.arrayFirst(self.items(), function (item) {
+            return menuItem == item.menuItem();
+        });
+
+        if (item) {
+            item.addOne();
+        } else {
+            item = new LT.OrderItem({menuItem: menuItem, amount: 1});
+            self.items.push(item);
+        }
+    };
+
+    self.removeItem = function (item) {
+        if (item.amount() > 1) {
+            item.removeOne();
+        } else {
+            self.items.remove(item);
+        }
+    };
 };
 
 LT.OrderItem = function (data) {
     var self = this;
     data = data || {};
     self.menuItem = ko.observable(data.menuItem || null);
+
     self.amount = ko.observable(data.amount || null);
-    self.title = function () {
-        return this.menuItem().title;
-    };
-    self.price = function () {
-        return this.menuItem().price * this.amount();
-    };
+    self.title = ko.computed(function () {
+        return self.menuItem().title();
+    });
+    self.price = ko.computed(function () {
+        return self.menuItem().price() * self.amount();
+    });
     self.addOne = function () {
-        return this.amount(this.amount() + 1);
+        return self.amount(self.amount() + 1);
     };
     self.removeOne = function () {
-        return this.amount(this.amount() - 1);
+        return self.amount(self.amount() - 1);
     };
 };
 
-LT.viewModel = new (function(config) {
+LT.viewModel = new (function (config) {
     var self = this;
 
     self.menus = ko.observableArray([]);
@@ -57,58 +98,35 @@ LT.viewModel = new (function(config) {
         self.menus.push(new LT.Menu(config.menus[i]));
     }
 
-//    ko.utils.arrayForEach(config.menus, function (data) {
-//        self.menus.push(new LT.Menu(data));
-//    });
-
     //TODO: writable computed observable
     self.activeMenu = ko.observable(null);
+
     self.activateMenu = function (menu) {
         self.activeMenu(menu);
     };
 
-    //TODO: ko.computed
+    self.activeOrder = ko.observable(null);
+
     self.isActiveMenu = function (menu) {
         return menu == self.activeMenu();
     };
 
-    //order
-    self.addToOrder = function (menuItem) {
-
-        var item = ko.utils.arrayFirst(self.orderItems(), function (o) {
-            return menuItem.id == o.menuItem().id;
-        });
-        if (item) {
-            item.addOne();
-        } else {
-            item = new LT.OrderItem({menuItem: menuItem, amount: 1});
-            self.orderItems.push(item);
-        }
-
+    /**
+     * Adds a menu item to active order
+     *
+     * @param menuItem
+     */
+    self.addToActiveOrder = function (menuItem) {
+        self.activeOrder().addMenuItem(menuItem);
     };
 
     self.removeFromOrder = function (item) {
-        if (item.amount() > 1) {
-            item.removeOne();
-        } else {
-            self.orderItems.remove(item);
-        }
+        self.activeOrder().removeItem(item);
     };
 
-    self.orderItems = ko.observableArray();
-
-    self.orderTotal = ko.dependentObservable(function () {
-        var total = 0;
-
-        ko.utils.arrayForEach(self.orderItems(), function (item) {
-            total += item.price();
-        });
-
-        return total;
-    });
-
     //initial data
-    self.activateMenu(self.menus()[0]);
+    self.activeMenu(self.menus()[0]);
+    self.activeOrder(new LT.Order());
 
 })(LT.config);
 

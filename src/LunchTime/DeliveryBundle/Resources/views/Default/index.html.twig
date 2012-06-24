@@ -4,7 +4,6 @@
 {{ parent() }}
 <script type="text/javascript">
     //lets make active menu to be the first one in the list
-    //LT.config.activeMenuId = 3;
     LT.config.menus = {{ menus | json_encode() | raw }};
 </script>
 {% endblock %}
@@ -25,7 +24,7 @@
 
     <div class="menu">
         <ul class="menu-items list" data-bind="foreach: items">
-            <li class="item clickable" data-bind="click: $root.addToOrder">
+            <li class="item clickable" data-bind="click: $root.addToActiveOrder">
                 <span class="title" data-bind="text: title"></span>
                 <span data-bind="text: price"></span>
             </li>
@@ -33,22 +32,20 @@
     </div>
 </div>
 
-
-
 <h3>Your order:</h3>
 
-<div class="order">
+<div class="order" data-bind="with: activeOrder">
 
-    <ul class="order-items list" data-bind="foreach: orderItems">
+    <ul class="order-items list" data-bind="foreach: items">
         <li class="item">
-            <span class="title" data-bind="text: title()"></span>
-            <span data-bind="text: amount()"></span>
+            <span class="title" data-bind="text: title"></span>
+            <span data-bind="text: amount"></span>
             <span class="clickable" data-bind="click: $root.removeFromOrder">-1</span>
             <span class="clickable" data-bind="click: $data.addOne">+1</span>
         </li>
     </ul>
     <div class="total">
-        Total: <span data-bind="text: orderTotal()"></span>
+        Total: <span data-bind="text: totalPrice"></span>
     </div>
 </div>
 
