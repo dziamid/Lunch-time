@@ -33,6 +33,13 @@ class Item
      */
     private $menu;
 
+    /**
+     * @var float $price
+     *
+     * @ORM\Column(name="price", type="float")
+     */
+    private $price;
+
     public function __toString()
     {
         return (string)$this->title;
@@ -86,5 +93,25 @@ class Item
     public function getMenu()
     {
         return $this->menu;
+    }
+
+    /**
+     * Set price
+     *
+     * @param float $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * Get price
+     *
+     * @return float 
+     */
+    public function getPrice()
+    {
+        return $this->price;
     }
 }

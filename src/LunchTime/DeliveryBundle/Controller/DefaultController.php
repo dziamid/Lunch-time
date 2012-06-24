@@ -36,6 +36,7 @@ class DefaultController extends Controller
             return array(
                 'id' => $item->getId(),
                 'title' => $item->getTitle(),
+                'price' => $item->getPrice()
             );
         });
 
