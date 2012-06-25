@@ -3,6 +3,7 @@
 namespace LunchTime\DeliveryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\SerializerBundle\Annotation as Serializer;
 
 /**
  * LunchTime\DeliveryBundle\Entity\Menu
@@ -23,6 +24,7 @@ class Menu
 
     /**
      * @var date $due_date
+     * @Serializer\SerializedName("date")
      *
      * @ORM\Column(name="due_date", type="date")
      */

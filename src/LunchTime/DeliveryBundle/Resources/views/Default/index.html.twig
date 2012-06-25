@@ -3,8 +3,7 @@
 {% block app %}
 {{ parent() }}
 <script type="text/javascript">
-    //lets make active menu to be the first one in the list
-    LT.config.menus = {{ menus | json_encode() | raw }};
+    LT.config.menus = {{ menus | serialize('json') | raw }};
 </script>
 {% endblock %}
 

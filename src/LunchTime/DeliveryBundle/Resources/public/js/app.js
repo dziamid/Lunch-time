@@ -8,14 +8,15 @@ LT.Menu = function (data) {
     var self = this;
     data = data || {};
     self.id = ko.observable(data.id || null);
-    self.date = ko.observable(data.date || null);
+    var date = Date.parse(data.date) || null;
+    self.date = ko.observable(date);
     self.items = ko.observableArray([]);
     data.items = data.items || [];
     for (var i = 0; i < data.items.length; i++) {
         self.items.push(new LT.MenuItem(data.items[i]));
     }
     self.title = ko.computed(function () {
-        return self.date();
+        return self.date().toString('MMMM d');
     });
 };
 
@@ -125,7 +126,7 @@ LT.viewModel = new (function (config) {
     };
 
     //initial data
-    self.activeMenu(self.menus()[0]);
+    self.activeMenu(self.menus()[self.menus().length - 1]);
     self.activeOrder(new LT.Order());
 
 })(LT.config);

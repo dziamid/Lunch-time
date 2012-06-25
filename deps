@@ -35,7 +35,7 @@
 
 [metadata]
     git=https://github.com/schmittjoh/metadata.git
-    version=1.0.0
+    version=1.1.0
 
 [SensioFrameworkExtraBundle]
     git=https://github.com/sensio/SensioFrameworkExtraBundle.git
@@ -71,3 +71,7 @@
 
 [knockout-js]
     git=git://github.com/SteveSanderson/knockout.git
+
+[JMSSerializerBundle]
+    git=git://github.com/schmittjoh/JMSSerializerBundle.git
+    target=bundles/JMS/SerializerBundle

@@ -16,7 +16,8 @@ class MenuRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('m')
             ->select('m, i')
-            ->leftJoin('m.items', 'i');
+            ->leftJoin('m.items', 'i')
+            ->orderBy('m.due_date');
 
         return $qb->getQuery();
     }
