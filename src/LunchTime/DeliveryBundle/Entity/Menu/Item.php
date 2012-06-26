@@ -3,6 +3,7 @@
 namespace LunchTime\DeliveryBundle\Entity\Menu;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\SerializerBundle\Annotation as Serializer;
 
 /**
  * LunchTime\DeliveryBundle\Entity\Menu\Item
@@ -14,7 +15,7 @@ class Item
 {
     /**
      * @var integer $id
-     *
+     * @Serializer\Type("integer")
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")

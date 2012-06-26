@@ -7,183 +7,47 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
-
-use LunchTime\DeliveryBundle\Entity\Client\Order\Item;
-
-use LunchTime\DeliveryBundle\Form\Client\Order\ItemType;
 use Doctrine\Common\Collections\ArrayCollection;
+
+use LunchTime\DeliveryBundle\Entity\Client\Order;
+use LunchTime\DeliveryBundle\Form\Client\OrderType;
 
 class OrderController extends Controller
 {
-    /**
-     * @Route("/order")
-     */
-    public function indexAction()
-    {
-        /** @var $em \Doctrine\ORM\EntityManager */
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $orders = $em->getRepository('LTDeliveryBundle:Client\Order')->getListWithItemsQuery()
-            ->getResult();
-
-        $_orders = array();
-        foreach ($orders as $order) {
-            $_orders[] = $this->serializeOrder($order);
-        }
-
-        return new Response(json_encode($_orders));
-    }
 
     /**
-     * @Route("/order/item")
-     * @Method("GET")
-     */
-    public function itemsAction()
-    {
-        /** @var $em \Doctrine\ORM\EntityManager */
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $items = $em->getRepository('LTDeliveryBundle:Client\Order\Item')->getListQuery()
-            ->getResult();
-
-        $_items = array();
-        foreach ($items as $item) {
-            $_items[] = $this->serializeItem($item);
-        }
-
-        return new Response(json_encode($_items));
-    }
-
-    /**
-     * @Route("/order/item")
+     * @Route(name="orderBaseUrl", pattern="/order")
      * @Method("POST")
      */
-    public function createItemsAction()
+    public function createAction()
     {
+        /** @var $em \Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getEntityManager();
+        $orderJson = $this->getRequest()->getContent();
 
-        $_items = json_decode($this->getRequest()->getContent(), true);
-        $items = new ArrayCollection();
-        foreach ($_items as $_item) {
-            $item = new Item();
-            $form = $this->createForm(new ItemType(), $item);
-            $form->bind($_item);
-            if ($form->isValid()) {
-                $em->persist($item);
-                $items->add($item);
-            }
-        }
-        $em->flush();
-
-        $_items = $this->serializeItems($items);
-        return new Response(json_encode($_items));
-
-    }
-
-    /**
-     * @Route("/order/item")
-     * @Method("PUT")
-     */
-    public function updateItemsAction()
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $_items = json_decode($this->getRequest()->getContent(), true);
-        $_ids = array_map(function ($item)
-        {
-            return $item['id'];
-        }, $_items);
-
-        $items = $em->getRepository('LTDeliveryBundle:Client\Order\Item')->getListByIds($_ids)
-            ->getResult();
-
-        foreach ($_items as $_item) {
-            $item = array_filter($items, function($item) use ($_item)
-            {
-                return $item->getId() == $_item['id'];
-            });
-            $item = array_shift($item);
-            if (false == $item) {
-                //don't update items that are not present
-                //may occur if item is already deleted
-                continue;
-            }
-
-            $form = $this->createForm(new ItemType(), $item);
-            unset($_item['id']);
-            $form->bind($_item);
-            if ($form->isValid()) {
-                $em->persist($item);
-            }
-        }
-        $em->flush();
-
-        $_items = $this->serializeItems($items);
-        return new Response(json_encode($_items));
-
-    }
-
-    /**
-     * @Route("/order/item")
-     * @Method("DELETE")
-     */
-    public function deleteItemsAction()
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $_ids = json_decode($this->getRequest()->getContent(), true);
-        $items = $em->getRepository('LTDeliveryBundle:Client\Order\Item')->getListByIds($_ids)
-            ->getResult();
-
-        foreach ($items as $item) {
-            $em->remove($item);
+        $order = $this->get('serializer')->deserialize($orderJson, 'LunchTime\DeliveryBundle\Entity\Client\Order', 'json');
+        $em->persist($order);
+        //right now em is not aware of any deserialized entities
+        //so it will treat all of them as being new
+        //to correctly save the graph we need to load those entities that are not new
+        //in this particular case - menu items
+        foreach ($order->getItems() as $item) {
+            $menuItem = $em->find('LTDeliveryBundle:Menu\Item', $item->getMenuItem()->getId());
+            $item->setMenuItem($menuItem);
+            $em->persist($item);
         }
 
         $em->flush();
 
-        return new Response(json_encode($this->serializeItems($items)));
+        return new Response(json_encode(array('success' => true)));
 
     }
 
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm();
-    }
-
-    protected function serializeOrder($order)
-    {
-        $items = $order->getItems()->map(function ($item)
-        {
-            return $item->getId();
-        });
-
-        return array(
-            'id'       => $order->getId(),
-            'due_date' => $order->getDueDate()->format('Y-m-d H:i:s'),
-            'items'    => $items->toArray(),
-        );
-    }
-
-    protected function serializeItem($item)
-    {
-        return array(
-            'id'           => $item->getId(),
-            'menu_item'    => $item->getMenuItem()->getId(),
-            'amount'       => $item->getAmount(),
-            'order'        => $item->getOrder()->getId(),
-        );
-    }
-
-    protected function serializeItems($items)
-    {
-        $_items = array();
-        foreach ($items as $item) {
-            $_items[] = $this->serializeItem($item);
-        }
-
-        return $_items;
-    }
+//    private function createDeleteForm($id)
+//    {
+//        return $this->createFormBuilder(array('id' => $id))
+//            ->add('id', 'hidden')
+//            ->getForm();
+//    }
 
 }

@@ -3,6 +3,7 @@
 namespace LunchTime\DeliveryBundle\Entity\Client\Order;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\SerializerBundle\Annotation as Serializer;
 
 /**
  * LunchTime\DeliveryBundle\Entity\Client\Order\Item
@@ -14,7 +15,7 @@ class Item
 {
     /**
      * @var integer $id
-     *
+     * @Serializer\Type("integer")
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -23,7 +24,7 @@ class Item
 
     /**
      * @var integer $amount
-     *
+     * @Serializer\Type("integer")
      * @ORM\Column(name="amount", type="integer")
      */
     private $amount;
@@ -34,6 +35,7 @@ class Item
     private $order;
 
     /**
+     * @Serializer\Type("\LunchTime\DeliveryBundle\Entity\Menu\Item")
      * @ORM\ManyToOne(targetEntity="\LunchTime\DeliveryBundle\Entity\Menu\Item")
      */
     private $menu_item;

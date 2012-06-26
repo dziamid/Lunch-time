@@ -3,6 +3,8 @@
 namespace LunchTime\DeliveryBundle\Entity\Client;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\SerializerBundle\Annotation as Serializer;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * LunchTime\DeliveryBundle\Entity\Client\Order
@@ -22,12 +24,16 @@ class Order
     private $id;
 
     /**
+     * @var ArrayCollection $items
+     * @Serializer\Type("ArrayCollection<LunchTime\DeliveryBundle\Entity\Client\Order\Item>")
      * @ORM\OneToMany(targetEntity="\LunchTime\DeliveryBundle\Entity\Client\Order\Item", mappedBy="order")
      */
     private $items;
 
     /**
      * @var date $due_date
+     * @Serializer\SerializedName("date")
+     * @Serializer\Type("DateTime")
      *
      * @ORM\Column(name="due_date", type="date")
      */
@@ -47,7 +53,7 @@ class Order
 
     public function __construct()
     {
-        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->items = new ArrayCollection();
     }
 
     public function __toString()

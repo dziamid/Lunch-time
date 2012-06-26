@@ -7,9 +7,10 @@ ko.forEach = ko.utils.arrayForEach;
 LT.Menu = function (data) {
     var self = this;
     data = data || {};
-    self.id = ko.observable(data.id || null);
-    var date = Date.parse(data.date) || null;
-    self.date = ko.observable(date);
+    //id is required
+    self.id = ko.observable(data.id);
+    //date is required
+    self.date = ko.observable(Date.parse(data.date));
     self.items = ko.observableArray([]);
     data.items = data.items || [];
     for (var i = 0; i < data.items.length; i++) {
@@ -23,14 +24,20 @@ LT.Menu = function (data) {
 LT.MenuItem = function (data) {
     var self = this;
     data = data || {};
-    self.id = ko.observable(data.id || null);
-    self.title = ko.observable(data.title || null);
-    self.price = ko.observable(parseFloat(data.price) || null);
+    //id is required
+    self.id = ko.observable(data.id);
+    //title is required
+    self.title = ko.observable(data.title);
+    //price is required
+    self.price = ko.observable(parseFloat(data.price));
 };
 
 LT.Order = function (data) {
     var self = this;
     data = data || {};
+    self.id = ko.observable(data.id || null);
+    //date is required
+    self.date = ko.observable(Date.parse(data.date));
     self.items = ko.observableArray([]);
     data.items = data.items || [];
     for (var i = 0; i < data.items.length; i++) {
@@ -67,6 +74,7 @@ LT.Order = function (data) {
             self.items.remove(item);
         }
     };
+
 };
 
 LT.OrderItem = function (data) {
@@ -86,6 +94,34 @@ LT.OrderItem = function (data) {
     };
     self.removeOne = function () {
         return self.amount(self.amount() - 1);
+    };
+};
+
+
+LT.Order.prototype.toJSON = function () {
+    var obj = ko.toJS(this);
+
+    return {
+        id: obj.id,
+        date: obj.date.toString('yyyy-MM-dd HH:mm:ss'),
+        items: obj.items
+    };
+};
+
+LT.OrderItem.prototype.toJSON = function () {
+    var obj = ko.toJS(this);
+
+    return {
+        menu_item: obj.menuItem,
+        amount: obj.amount
+    };
+};
+
+LT.MenuItem.prototype.toJSON = function () {
+    var obj = ko.toJS(this);
+
+    return {
+        id: obj.id
     };
 };
 
@@ -125,9 +161,27 @@ LT.viewModel = new (function (config) {
         self.activeOrder().removeItem(item);
     };
 
+    self.submitOrder = function () {
+        var orderData = ko.toJSON(self.activeOrder());
+        console.log(orderData);
+
+
+        $.ajax({
+            url: config.orderBaseUrl,
+            data: orderData,
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    console.log('Saved successfully');
+                }
+            }
+        });
+    };
+
     //initial data
     self.activeMenu(self.menus()[self.menus().length - 1]);
-    self.activeOrder(new LT.Order());
+    self.activeOrder(new LT.Order({date: '2012-05-06'}));
 
 })(LT.config);
 

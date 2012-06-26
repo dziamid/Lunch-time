@@ -4,6 +4,7 @@
 {{ parent() }}
 <script type="text/javascript">
     LT.config.menus = {{ menus | serialize('json') | raw }};
+    LT.config.orderBaseUrl = "{{ path('orderBaseUrl') }}";
 </script>
 {% endblock %}
 
@@ -46,6 +47,7 @@
     <div class="total">
         Total: <span data-bind="text: totalPrice"></span>
     </div>
+    <button data-bind="click: $root.submitOrder">Submit your order</button>
 </div>
 
 
