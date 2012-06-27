@@ -30,6 +30,7 @@ class Item
     private $title;
 
     /**
+     * @Serializer\Exclude
      * @ORM\ManyToOne(targetEntity="\LunchTime\DeliveryBundle\Entity\Menu", inversedBy="items")
      */
     private $menu;

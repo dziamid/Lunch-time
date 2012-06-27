@@ -24,13 +24,13 @@ class OrderItemFixtures extends AbstractFixture implements FixtureInterface, Ord
         $item = new Item();
         $item->setOrder($order);
         $item->setMenuItem($this->getReference('menu-item-2'));
-        $item->setAmount(1);
+        $item->setAmount(2);
         $manager->persist($item);
 
         $item = new Item();
         $item->setOrder($order);
         $item->setMenuItem($this->getReference('menu-item-1'));
-        $item->setAmount(1);
+        $item->setAmount(3);
         $manager->persist($item);
 
         $manager->flush();

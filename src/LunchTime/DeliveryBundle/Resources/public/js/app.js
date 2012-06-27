@@ -53,7 +53,7 @@ LT.Order = function (data) {
         return total;
     });
 
-    self.addMenuItem = function (menuItem) {
+    self.addItem = function (menuItem) {
 
         var item = ko.utils.arrayFirst(self.items(), function (item) {
             return menuItem == item.menuItem();
@@ -80,7 +80,10 @@ LT.Order = function (data) {
 LT.OrderItem = function (data) {
     var self = this;
     data = data || {};
-    self.menuItem = ko.observable(data.menuItem || null);
+
+    var menuItem = data.menuItem || new LT.MenuItem(data.menu_item);
+    //menuItem is required
+    self.menuItem = ko.observable(menuItem);
 
     self.amount = ko.observable(data.amount || null);
     self.title = ko.computed(function () {
@@ -127,19 +130,32 @@ LT.MenuItem.prototype.toJSON = function () {
 
 LT.viewModel = new (function (config) {
     var self = this;
-
+    var i;
     self.menus = ko.observableArray([]);
-
     config.menus = config.menus || [];
-    for (var i = 0; i < config.menus.length; i++) {
+    for (i = 0; i < config.menus.length; i++) {
         self.menus.push(new LT.Menu(config.menus[i]));
     }
 
-    //TODO: writable computed observable
+    self.orders = ko.observableArray([]);
+    config.orders = config.orders || [];
+    for (i = 0; i < config.orders.length; i++) {
+        self.orders.push(new LT.Order(config.orders[i]));
+    }
+
     self.activeMenu = ko.observable(null);
+    self.activeOrder = ko.observable(null);
 
     self.activateMenu = function (menu) {
         self.activeMenu(menu);
+        var order = ko.utils.arrayFirst(self.orders(), function (order) {
+            return order.date().equals(menu.date());
+        });
+        if (!order) {
+            order = new LT.Order({date: menu.date().toString('yyyy-MM-dd HH:mm:ss')});
+            self.orders.push(order);
+        }
+        self.activeOrder(order);
     };
 
     self.activeOrder = ko.observable(null);
@@ -154,7 +170,7 @@ LT.viewModel = new (function (config) {
      * @param menuItem
      */
     self.addToActiveOrder = function (menuItem) {
-        self.activeOrder().addMenuItem(menuItem);
+        self.activeOrder().addItem(menuItem);
     };
 
     self.removeFromOrder = function (item) {
@@ -180,8 +196,8 @@ LT.viewModel = new (function (config) {
     };
 
     //initial data
-    self.activeMenu(self.menus()[self.menus().length - 1]);
-    self.activeOrder(new LT.Order({date: '2012-05-06'}));
+    self.activateMenu(self.menus()[self.menus().length - 1]);
+    //self.activeOrder(new LT.Order({date: '2012-05-06'}));
 
 })(LT.config);
 

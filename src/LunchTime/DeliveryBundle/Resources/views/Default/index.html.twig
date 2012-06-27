@@ -4,6 +4,8 @@
 {{ parent() }}
 <script type="text/javascript">
     LT.config.menus = {{ menus | serialize('json') | raw }};
+    LT.config.orders = {{ orders | serialize('json') | raw }};
+
     LT.config.orderBaseUrl = "{{ path('orderBaseUrl') }}";
 </script>
 {% endblock %}

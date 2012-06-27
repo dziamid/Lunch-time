@@ -17,11 +17,16 @@ class DefaultController extends Controller
         /** @var $em \Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getEntityManager();
 
+
         $menus = $em->getRepository('LTDeliveryBundle:Menu')->getListWithItemsQuery()
+            ->getResult();
+
+        $orders = $em->getRepository('LTDeliveryBundle:Client\Order')->getListWithItemsQuery()
             ->getResult();
 
         return $this->render('LTDeliveryBundle:Default:index.html.twig', array(
             'menus' => $menus,
+            'orders' => $orders,
         ));
     }
 
