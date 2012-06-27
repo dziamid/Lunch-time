@@ -10,6 +10,25 @@ LT.MenuItem = function (data) {
     self.price = ko.observable(parseFloat(data.price));
 };
 
+/**
+ * Factory of LT.MenuItem entities
+ *
+ */
+LT.MenuItemRepository = new (function () {
+    var self = this;
+    self.objects = ko.observableArray([]);
+    self.create = function (data) {
+        var object = ko.utils.arrayFirst(self.objects(), function (o) {
+            return ko.utils.unwrapObservable(o.id) == data.id;
+        });
+        if (!object) {
+            object = new LT.MenuItem(data);
+        }
+        self.objects.push(object);
+        return object;
+    }
+});
+
 LT.MenuItem.prototype.toJSON = function () {
     var obj = ko.toJS(this);
 

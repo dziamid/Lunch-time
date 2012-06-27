@@ -10,7 +10,7 @@ LT.Menu = function (data) {
     self.items = ko.observableArray([]);
     data.items = data.items || [];
     for (var i = 0; i < data.items.length; i++) {
-        self.items.push(new LT.MenuItem(data.items[i]));
+        self.items.push(LT.MenuItemRepository.create(data.items[i]));
     }
     self.title = ko.computed(function () {
         return self.date().toString('MMMM d');

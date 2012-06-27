@@ -3,7 +3,7 @@ LT.OrderItem = function (data) {
     var self = this;
     data = data || {};
 
-    var menuItem = data.menuItem || new LT.MenuItem(data.menu_item);
+    var menuItem = data.menuItem || LT.MenuItemRepository.create(data.menu_item);
     //menuItem is required
     self.menuItem = ko.observable(menuItem);
 
