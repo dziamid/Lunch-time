@@ -1,0 +1,54 @@
+LT.Order = function (data) {
+    var self = this;
+    data = data || {};
+    self.id = ko.observable(data.id || null);
+    //date is required
+    self.date = ko.observable(Date.parse(data.date));
+    self.items = ko.observableArray([]);
+    data.items = data.items || [];
+    for (var i = 0; i < data.items.length; i++) {
+        self.items.push(new LT.OrderItem(data.items[i]));
+    }
+    self.totalPrice = ko.computed(function () {
+        var total = 0;
+
+        ko.utils.arrayForEach(self.items(), function (item) {
+            total += item.price();
+        });
+
+        return total;
+    });
+
+    self.addItem = function (menuItem) {
+
+        var item = ko.utils.arrayFirst(self.items(), function (item) {
+            return menuItem == item.menuItem();
+        });
+
+        if (item) {
+            item.addOne();
+        } else {
+            item = new LT.OrderItem({menuItem: menuItem, amount: 1});
+            self.items.push(item);
+        }
+    };
+
+    self.removeItem = function (item) {
+        if (item.amount() > 1) {
+            item.removeOne();
+        } else {
+            self.items.remove(item);
+        }
+    };
+
+};
+
+LT.Order.prototype.toJSON = function () {
+    var obj = ko.toJS(this);
+
+    return {
+        id: obj.id,
+        date: obj.date.toString('yyyy-MM-dd HH:mm:ss'),
+        items: obj.items
+    };
+};
