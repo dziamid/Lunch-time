@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use LunchTime\DeliveryBundle\Entity\Client\Order;
-use LunchTime\DeliveryBundle\Form\Client\OrderType;
 
 class OrderController extends Controller
 {
@@ -19,20 +18,23 @@ class OrderController extends Controller
      * @Route(name="orderBaseUrl", pattern="/order")
      * @Method("POST")
      */
-    public function createAction()
+    public function persistAction()
     {
         /** @var $em \Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getEntityManager();
-        $orderJson = $this->getRequest()->getContent();
 
-        $order = $this->get('serializer')->deserialize($orderJson, 'LunchTime\DeliveryBundle\Entity\Client\Order', 'json');
+        $_order = json_decode($this->getRequest()->getContent(), true);
+        $order = $_order['id'] !== null ? $em->find('LTDeliveryBundle:Client\Order', $_order['id']) : new Order();
+        $order->setDueDate(new \DateTime($_order['date']));
         $em->persist($order);
-        //right now em is not aware of any deserialized entities
-        //so it will treat all of them as being new
-        //to correctly save the graph we need to load those entities that are not new
-        //in this particular case - menu items
-        foreach ($order->getItems() as $item) {
-            $menuItem = $em->find('LTDeliveryBundle:Menu\Item', $item->getMenuItem()->getId());
+
+        foreach ($_order['items'] as $_item) {
+            $item = $_order['id'] !== null ? $em->find('LTDeliveryBundle:Client\Order\Item', $_item['id']) : new Order\Item();
+            $item->setAmount($_item['amount']);
+            $item->setOrder($order);
+
+            $_menuItem = $_item['menu_item'];
+            $menuItem = $em->find('LTDeliveryBundle:Menu\Item', $_menuItem['id']);
             $item->setMenuItem($menuItem);
             $em->persist($item);
         }

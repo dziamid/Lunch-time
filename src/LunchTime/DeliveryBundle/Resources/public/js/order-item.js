@@ -3,6 +3,8 @@ LT.OrderItem = function (data) {
     var self = this;
     data = data || {};
 
+    self.id = ko.observable(data.id || null);
+
     var menuItem = data.menuItem || LT.MenuItemRepository.create(data.menu_item);
     //menuItem is required
     self.menuItem = ko.observable(menuItem);
@@ -27,6 +29,7 @@ LT.OrderItem.prototype.toJSON = function () {
     var obj = ko.toJS(this);
 
     return {
+        id: obj.id,
         menu_item: obj.menuItem,
         amount: obj.amount
     };

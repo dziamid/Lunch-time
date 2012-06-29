@@ -17,6 +17,7 @@ class Order
     /**
      * @var integer $id
      *
+     * @Serializer\Type("integer")
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
