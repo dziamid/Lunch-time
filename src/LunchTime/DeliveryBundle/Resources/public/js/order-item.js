@@ -10,6 +10,7 @@ LT.OrderItem = function (data) {
     self.menuItem = ko.observable(menuItem);
 
     self.amount = ko.observable(data.amount || null);
+
     self.title = ko.computed(function () {
         return self.menuItem().title();
     });
@@ -22,6 +23,15 @@ LT.OrderItem = function (data) {
     self.removeOne = function () {
         return self.amount(self.amount() - 1);
     };
+
+    self.isNew = ko.computed(function () {
+        return self.id() === null;
+    });
+
+    self.isActive = ko.computed(function () {
+        return self.amount() > 0;
+    });
+
 };
 
 

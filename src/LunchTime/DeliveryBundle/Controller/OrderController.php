@@ -20,6 +20,9 @@ class OrderController extends Controller
      */
     public function persistAction()
     {
+        //TODO: use deserialize method for properties only, mark relations to skip,
+        //      try merging existing entities into em
+
         /** @var $em \Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -29,19 +32,29 @@ class OrderController extends Controller
         $em->persist($order);
 
         foreach ($_order['items'] as $_item) {
-            $item = $_order['id'] !== null ? $em->find('LTDeliveryBundle:Client\Order\Item', $_item['id']) : new Order\Item();
+            $item = $_item['id'] !== null ? $em->find('LTDeliveryBundle:Client\Order\Item', $_item['id']) : new Order\Item();
             $item->setAmount($_item['amount']);
             $item->setOrder($order);
 
             $_menuItem = $_item['menu_item'];
             $menuItem = $em->find('LTDeliveryBundle:Menu\Item', $_menuItem['id']);
             $item->setMenuItem($menuItem);
-            $em->persist($item);
+
+            //remove items with 0 amount
+            if ($item->getAmount() == 0) {
+                $em->remove($item);
+            } else {
+                $em->persist($item);
+            }
+
         }
 
         $em->flush();
 
-        return new Response(json_encode(array('success' => true)));
+        return new Response(json_encode(array(
+            'success' => true,
+            'order' => json_decode($this->get('serializer')->serialize($order, 'json'), true),
+        )));
 
     }
 

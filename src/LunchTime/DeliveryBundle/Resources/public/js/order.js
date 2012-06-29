@@ -9,6 +9,14 @@ LT.Order = function (data) {
     for (var i = 0; i < data.items.length; i++) {
         self.items.push(new LT.OrderItem(data.items[i]));
     }
+
+    self.activeItems = ko.computed(function () {
+        return ko.utils.arrayFilter(self.items(), function (item) {
+            return item.isActive();
+        });
+
+    });
+
     self.totalPrice = ko.computed(function () {
         var total = 0;
 
@@ -37,7 +45,8 @@ LT.Order = function (data) {
         if (item.amount() > 1) {
             item.removeOne();
         } else {
-            self.items.remove(item);
+            item.isNew() ? self.items.remove(item) : item.amount(0);
+
         }
     };
 
