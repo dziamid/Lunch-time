@@ -27,12 +27,12 @@ class Order
     /**
      * @var ArrayCollection $items
      * @Serializer\Type("ArrayCollection<LunchTime\DeliveryBundle\Entity\Client\Order\Item>")
-     * @ORM\OneToMany(targetEntity="\LunchTime\DeliveryBundle\Entity\Client\Order\Item", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="\LunchTime\DeliveryBundle\Entity\Client\Order\Item", mappedBy="order", cascade={"persist", "remove"})
      */
     private $items;
 
     /**
-     * @var date $due_date
+     * @var \DateTime $due_date
      * @Serializer\SerializedName("date")
      * @Serializer\Type("DateTime")
      *

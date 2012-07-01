@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use LunchTime\DeliveryBundle\Entity\Client\Order;
+use Doctrine\ORM\EntityManager;
 
 class OrderController extends Controller
 {
@@ -20,42 +21,66 @@ class OrderController extends Controller
      */
     public function persistAction()
     {
-        //TODO: use deserialize method for properties only, mark relations to skip,
-        //      try merging existing entities into em
-
-        /** @var $em \Doctrine\ORM\EntityManager */
+        /** @var $em EntityManager */
         $em = $this->getDoctrine()->getEntityManager();
 
-        $_order = json_decode($this->getRequest()->getContent(), true);
-        $order = $_order['id'] !== null ? $em->find('LTDeliveryBundle:Client\Order', $_order['id']) : new Order();
-        $order->setDueDate(new \DateTime($_order['date']));
+        $data = json_decode($this->getRequest()->getContent(), true);
+
+        $order = $this->mapOrder($data, $em);
+
         $em->persist($order);
-
-        foreach ($_order['items'] as $_item) {
-            $item = $_item['id'] !== null ? $em->find('LTDeliveryBundle:Client\Order\Item', $_item['id']) : new Order\Item();
-            $item->setAmount($_item['amount']);
-            $item->setOrder($order);
-
-            $_menuItem = $_item['menu_item'];
-            $menuItem = $em->find('LTDeliveryBundle:Menu\Item', $_menuItem['id']);
-            $item->setMenuItem($menuItem);
-
-            //remove items with 0 amount
-            if ($item->getAmount() == 0) {
-                $em->remove($item);
-            } else {
-                $em->persist($item);
-            }
-
-        }
-
         $em->flush();
 
-        return new Response(json_encode(array(
+        $result = json_encode(array(
             'success' => true,
             'order' => json_decode($this->get('serializer')->serialize($order, 'json'), true),
-        )));
+        ));
 
+        return new Response($result);
+
+    }
+
+    /**
+     * Deserializes an array to Order entity
+     *
+     * @param $orderData array serialized entity data
+     * @param $em EntityManager instance
+     * @return Order
+     */
+    protected function mapOrder($orderData, $em)
+    {
+        $order = $orderData['id'] !== null ? $em->find('LTDeliveryBundle:Client\Order', $orderData['id']) : new Order();
+        $order->setDueDate(new \DateTime($orderData['date']));
+
+        foreach ($orderData['items'] as $itemData) {
+            $item = $this->mapOrderItem($itemData, $em);
+            $order->addItem($item);
+            $item->setOrder($order);
+        }
+
+        return $order;
+    }
+
+    /**
+     * Deserializes an array to Order\Item entity
+     *
+     * @param $itemData array serialized entity data
+     * @param $em EntityManager
+     *
+     * @return Order/Item
+     */
+    protected function mapOrderItem($itemData, $em)
+    {
+        $item = $itemData['id'] !== null ? $em->find('LTDeliveryBundle:Client\Order\Item', $itemData['id']) : new Order\Item();
+        $item->setAmount($itemData['amount']);
+
+        $menuItemData = $itemData['menu_item'];
+
+        //TODO: check existance and handle errors
+        $menuItem = $em->find('LTDeliveryBundle:Menu\Item', $menuItemData['id']);
+        $item->setMenuItem($menuItem);
+
+        return $item;
     }
 
 

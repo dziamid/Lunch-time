@@ -93,7 +93,7 @@ class Item
     /**
      * Set menu_item
      *
-     * @param LunchTime\DeliveryBundle\Entity\Menu\Item $menuItem
+     * @param \LunchTime\DeliveryBundle\Entity\Menu\Item $menuItem
      */
     public function setMenuItem(\LunchTime\DeliveryBundle\Entity\Menu\Item $menuItem)
     {
