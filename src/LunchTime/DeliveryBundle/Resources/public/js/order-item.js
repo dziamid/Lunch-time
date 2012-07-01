@@ -8,7 +8,7 @@ LT.OrderItem = function (data) {
     //menuItem is required
     self.menuItem = ko.observable(menuItem);
 
-    self.amount = ko.observable(data.amount || null);
+    self.amount = ko.observable(data.amount || 0);
 
     self.title = ko.computed(function () {
         return self.menuItem().title();
@@ -27,6 +27,10 @@ LT.OrderItem = function (data) {
         return self.id() === null;
     });
 
+    self.isRemoved = ko.computed(function () {
+        return self.amount() == 0;
+    });
+
     self.isActive = ko.computed(function () {
         return self.amount() > 0;
     });
@@ -34,11 +38,16 @@ LT.OrderItem = function (data) {
     self.toJSON = function () {
         var obj = ko.toJS(this);
 
-        return {
+        var data = {
             id: obj.id,
             menu_item: obj.menuItem,
             amount: obj.amount
         };
+        if (obj.isRemoved) {
+            data._destroy = true;
+        }
+
+        return data;
     };
 
 };

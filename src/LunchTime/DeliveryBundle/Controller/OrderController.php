@@ -54,9 +54,10 @@ class OrderController extends Controller
         $order->setClientId($orderData['client_id']);
 
         foreach ($orderData['items'] as $itemData) {
-            $item = $this->mapOrderItem($itemData, $em);
-            $order->addItem($item);
-            $item->setOrder($order);
+            if ($item = $this->mapOrderItem($itemData, $em)) {
+                $order->addItem($item);
+                $item->setOrder($order);
+            }
         }
 
         return $order;
@@ -72,6 +73,7 @@ class OrderController extends Controller
      */
     protected function mapOrderItem($itemData, $em)
     {
+        //TODO: check existance and handle errors
         $item = $itemData['id'] !== null ? $em->find('LTDeliveryBundle:Client\Order\Item', $itemData['id']) : new Order\Item();
         $item->setAmount($itemData['amount']);
 
@@ -81,6 +83,10 @@ class OrderController extends Controller
         $menuItem = $em->find('LTDeliveryBundle:Menu\Item', $menuItemData['id']);
         $item->setMenuItem($menuItem);
 
+        if (isset($itemData['_destroy']) && $itemData['_destroy']) {
+            $em->remove($item);
+            return false;
+        }
         return $item;
     }
 
