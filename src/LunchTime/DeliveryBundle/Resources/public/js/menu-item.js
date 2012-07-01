@@ -8,6 +8,14 @@ LT.MenuItem = function (data) {
     self.title = ko.observable(data.title);
     //price is required
     self.price = ko.observable(parseFloat(data.price));
+
+    self.toJSON = function () {
+        var obj = ko.toJS(this);
+
+        return {
+            id: obj.id
+        };
+    };
 };
 
 /**
@@ -29,10 +37,4 @@ LT.MenuItemRepository = new (function () {
     }
 });
 
-LT.MenuItem.prototype.toJSON = function () {
-    var obj = ko.toJS(this);
 
-    return {
-        id: obj.id
-    };
-};

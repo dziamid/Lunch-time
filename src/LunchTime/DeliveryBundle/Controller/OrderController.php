@@ -51,6 +51,7 @@ class OrderController extends Controller
     {
         $order = $orderData['id'] !== null ? $em->find('LTDeliveryBundle:Client\Order', $orderData['id']) : new Order();
         $order->setDueDate(new \DateTime($orderData['date']));
+        $order->setClientId($orderData['client_id']);
 
         foreach ($orderData['items'] as $itemData) {
             $item = $this->mapOrderItem($itemData, $em);

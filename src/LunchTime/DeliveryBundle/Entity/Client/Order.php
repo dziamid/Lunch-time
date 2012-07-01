@@ -25,6 +25,12 @@ class Order
     private $id;
 
     /**
+     * @var integer $client_id Id of this entity currently mapped on client side
+     * @Serializer\Type("integer")
+     */
+    private $client_id;
+
+    /**
      * @var ArrayCollection $items
      * @Serializer\Type("ArrayCollection<LunchTime\DeliveryBundle\Entity\Client\Order\Item>")
      * @ORM\OneToMany(targetEntity="\LunchTime\DeliveryBundle\Entity\Client\Order\Item", mappedBy="order", cascade={"persist", "remove"})
@@ -100,5 +106,21 @@ class Order
     public function getDueDate()
     {
         return $this->due_date;
+    }
+
+    /**
+     * @param int $client_id
+     */
+    public function setClientId($client_id)
+    {
+        $this->client_id = $client_id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getClientId()
+    {
+        return $this->client_id;
     }
 }

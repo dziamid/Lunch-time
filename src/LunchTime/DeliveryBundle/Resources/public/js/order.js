@@ -2,6 +2,8 @@ LT.Order = function (data) {
     var self = this;
     data = data || {};
     self.id = ko.observable(data.id || null);
+    var clientId = data.client_id || LT.OrderRepository.generateClientId();
+    self.clientId = ko.observable(clientId);
     //date is required
     self.date = ko.observable(Date.parse(data.date));
     self.items = ko.observableArray([]);
@@ -50,14 +52,30 @@ LT.Order = function (data) {
         }
     };
 
-};
+    self.toJSON = function () {
+        var obj = ko.toJS(this);
 
-LT.Order.prototype.toJSON = function () {
-    var obj = ko.toJS(this);
-
-    return {
-        id: obj.id,
-        date: obj.date.toString('yyyy-MM-dd HH:mm:ss'),
-        items: obj.items
+        return {
+            id: obj.id,
+            client_id: obj.clientId,
+            date: obj.date.toString('yyyy-MM-dd HH:mm:ss'),
+            items: obj.items
+        };
     };
+
 };
+
+
+/**
+ * Factory of LT.Order entities
+ *
+ */
+LT.OrderRepository = new (function () {
+    var self = this;
+    self.lastId = 1;
+
+    self.generateClientId = function () {
+        self.lastId++;
+        return self.lastId;
+    };
+});

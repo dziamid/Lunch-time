@@ -64,7 +64,8 @@ LT.viewModel = new (function (config) {
             dataType: 'json',
             success: function (data) {
                 if (data.success) {
-                    console.log('Saved successfully');
+                    var order = new LT.Order(data.order);
+                    self.activeOrder(order);
                 }
             }
         });

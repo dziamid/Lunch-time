@@ -1,4 +1,3 @@
-
 LT.OrderItem = function (data) {
     var self = this;
     data = data || {};
@@ -32,15 +31,15 @@ LT.OrderItem = function (data) {
         return self.amount() > 0;
     });
 
-};
+    self.toJSON = function () {
+        var obj = ko.toJS(this);
 
-
-LT.OrderItem.prototype.toJSON = function () {
-    var obj = ko.toJS(this);
-
-    return {
-        id: obj.id,
-        menu_item: obj.menuItem,
-        amount: obj.amount
+        return {
+            id: obj.id,
+            menu_item: obj.menuItem,
+            amount: obj.amount
+        };
     };
+
 };
+
