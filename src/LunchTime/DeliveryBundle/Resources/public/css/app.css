@@ -1,7 +1,10 @@
 body {
     font-family: Helvetica, "Helvetica Neue";
-    background-color:#528CE0;
+    background-color: #D2E0E6;
 
+}
+ul, ol {
+    margin: 0;
 }
 .body {
     background-color: white;
@@ -13,20 +16,17 @@ body {
 }
 
 
-.col {
+.columns > div {
     width: 50%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-    margin: 0;
+    padding: 10px;
     float: left;
 }
 
-.list {
-    display: table-row;
-}
 .item {
     cursor: pointer;
-    background: #ccc;
+    background: #D2E0E6;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -34,7 +34,7 @@ body {
     list-style: none;
 }
 .item span {
-    display: table-cell;
+    display: inline-block;
     padding: 5px 10px;
     -moz-user-select: none;
     -khtml-user-select: none;
@@ -42,11 +42,8 @@ body {
     -o-user-select: none;
 }
 
-.calendar.list {
-    display: table-row;
-}
 .calendar .item {
-    display: table-cell;
+    float: left;
 
 }
 .clickable:hover,
@@ -55,12 +52,8 @@ body {
     color: white;
 }
 
-.order-items .title {
+.title {
     width: 250px;
 }
-.menu, .order {
-    width: 300px;
-}
-.menu .title {
-    width: 250px;
-}
+
+

@@ -6,6 +6,11 @@ LT.Order = function (data) {
     self.clientId = ko.observable(clientId);
     //date is required
     self.date = ko.observable(Date.parse(data.date));
+
+    self.title = ko.computed(function () {
+        return self.date().toString('MMMM d');
+    });
+
     self.items = ko.observableArray([]);
     data.items = data.items || [];
     for (var i = 0; i < data.items.length; i++) {
