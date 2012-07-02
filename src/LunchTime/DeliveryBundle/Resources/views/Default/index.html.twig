@@ -13,13 +13,15 @@
 {% block body %}
 
 
-<h3>Calendar</h3>
+<div class="calendar">
+    <h3>Calendar</h3>
+    <ul class="items clearfix" data-bind="foreach: menus">
+        <li class="item clickable" data-bind="click: $root.activateMenu, css: {active: $root.isActiveMenu($data)}">
+            <span data-bind="text: title"></span>
+        </li>
+    </ul>
+</div>
 
-<ul class="calendar clearfix" data-bind="foreach: menus">
-    <li class="item clickable" data-bind="click: $root.activateMenu, css: {active: $root.isActiveMenu($data)}">
-        <span data-bind="text: title"></span>
-    </li>
-</ul>
 
 <div class="columns clearfix">
     <div class="active-menu" data-bind="with: activeMenu">

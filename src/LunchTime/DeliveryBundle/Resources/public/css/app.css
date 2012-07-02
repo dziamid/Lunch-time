@@ -42,10 +42,16 @@ ul, ol {
     -o-user-select: none;
 }
 
+.calendar {
+    text-align: center;
+}
+.calendar .items {
+    display: inline-block; /* for center alignment */
+}
 .calendar .item {
     float: left;
-
 }
+
 .clickable:hover,
 .item.active {
     background: black;
